@@ -4,4 +4,5 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="open_in_browser">Open in browser</string>
+    <string name="there_is_no_token">there is no token</string>
 </resources>
