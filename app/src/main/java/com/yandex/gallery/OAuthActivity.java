@@ -1,21 +1,28 @@
 package com.yandex.gallery;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yandex.disk.rest.Credentials;
+import com.yandex.disk.rest.DownloadListener;
 import com.yandex.disk.rest.ResourcesArgs;
 import com.yandex.disk.rest.RestClient;
+import com.yandex.disk.rest.exceptions.ServerException;
 import com.yandex.disk.rest.exceptions.ServerIOException;
 import com.yandex.disk.rest.json.DiskInfo;
-import com.yandex.disk.rest.json.Resource;
 import com.yandex.disk.rest.json.ResourceList;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,8 +47,7 @@ public class OAuthActivity extends AppCompatActivity {
                 TextView diskInfoTextView = findViewById(R.id.disk_info);
                 new DiskInfoTask(diskInfoTextView).execute(token);
 
-                TextView lastUploadTextView = findViewById(R.id.last_upload);
-                new LastUploadedTask(lastUploadTextView).execute(token);
+                new LastUploadedTask().execute(token);
             }
         } else {
             Log.d(LOG_TAG, "data is null");
@@ -81,25 +87,16 @@ public class OAuthActivity extends AppCompatActivity {
 
     private class LastUploadedTask extends AsyncTask<String, Void, String> {
 
-        private TextView diskInfoTextView;
-
-        LastUploadedTask(TextView diskInfoTextView) {
-            this.diskInfoTextView = diskInfoTextView;
-        }
+        private Credentials credentials;
 
         @Override
         protected String doInBackground(String... data) {
             try {
-                Credentials credentials = new Credentials("", data[0]);
+                this.credentials = new Credentials("", data[0]);
+
                 RestClient restClient = new RestClient(credentials);
                 ResourceList resourceList = restClient.getLastUploadedResources(new ResourcesArgs.Builder().setMediaType("image").build());
-
-                StringBuilder names = new StringBuilder();
-                for (Resource resource : resourceList.getItems()) {
-                    names.append(resource.getName()).append("\n");
-                }
-
-                return names.toString();
+                return resourceList.getItems().get(0).getPath().getPath();
             } catch (IOException e) {
                 e.printStackTrace();
                 return getString(R.string.there_was_a_problem_with_the_network);
@@ -111,7 +108,52 @@ public class OAuthActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            diskInfoTextView.setText(s);
+            if (s != null) {
+                ((TextView) findViewById(R.id.last_upload)).setText(s);
+                new ViewImageTask(credentials).execute(s);
+            }
+        }
+    }
+
+
+    private class ViewImageTask extends AsyncTask<String, Void, String> {
+
+        private final Credentials credentials;
+        private ByteArrayOutputStream byteArrayOutputStream;
+
+        ViewImageTask(Credentials credentials) {
+            this.credentials = credentials;
+        }
+
+        @Override
+        protected String doInBackground(final String... data) {
+            try {
+                RestClient restClient = new RestClient(credentials);
+                restClient.downloadFile(data[0], new DownloadListener() {
+                    @Override
+                    public OutputStream getOutputStream(boolean append) throws IOException {
+                        return byteArrayOutputStream = new ByteArrayOutputStream();
+                    }
+                });
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return getString(R.string.there_was_a_problem_with_the_network);
+            } catch (ServerException e) {
+                e.printStackTrace();
+                return getString(R.string.there_was_a_problem_with_the_yandex_server);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            ImageView imageView = findViewById(R.id.imageView);
+            if (s == null) {
+                Bitmap bmp = BitmapFactory.decodeStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+                imageView.setImageBitmap(bmp);
+            } else {
+                imageView.setContentDescription(s);
+            }
         }
     }
 }
