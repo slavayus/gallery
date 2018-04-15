@@ -5,4 +5,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="open_in_browser">Open in browser</string>
     <string name="there_is_no_token">there is no token</string>
+    <string name="there_is_no_info">there is no info</string>
+    <string name="there_was_a_problem_with_the_network">There was a problem with the network</string>
+    <string name="there_was_a_problem_with_the_yandex_server">There was a problem with the yandex server</string>
 </resources>
