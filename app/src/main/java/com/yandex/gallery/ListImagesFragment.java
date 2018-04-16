@@ -1,5 +1,7 @@
 package com.yandex.gallery;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,9 +10,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
-import java.util.ArrayList;
+import com.yandex.disk.rest.json.Resource;
+import com.yandex.gallery.tasks.BackgroundResponse;
+import com.yandex.gallery.tasks.DownloadImagesTask;
+import com.yandex.gallery.tasks.LastUploadedTask;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -35,41 +43,58 @@ public class ListImagesFragment extends Fragment {
         mImagesRecyclerView = view.findViewById(R.id.images_recycler_view);
         mImagesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateUI();
+        new LastUploadedTask(this).execute(mToken);
 
         return view;
     }
 
-    private void updateUI() {
-        List<String> data = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
-            data.add(String.valueOf(i));
+    public void onGetLastUploadedImages(BackgroundResponse response) {
+        switch (response.getStatus()) {
+            case OK: {
+                new DownloadImagesTask((List<Resource>) response.getData(), this).execute(mToken);
+                break;
+            }
+            //TODO:dialog
+            case ERROR:
         }
+    }
+
+
+    public void onDownloadImages(BackgroundResponse response) {
+        switch (response.getStatus()) {
+            case OK: {
+                updateUI(((List<ByteArrayOutputStream>) response.getData()));
+                break;
+            }
+            //TODO:dialog
+            case ERROR:
+        }
+    }
+
+    private void updateUI(List<ByteArrayOutputStream> data) {
         ImageAdapter imageAdapter = new ImageAdapter(data);
         mImagesRecyclerView.setAdapter(imageAdapter);
     }
 
     private class ImagesHolder extends RecyclerView.ViewHolder {
-        private final TextView mTextView;
-        private String mElement;
+        private final ImageView mImageView;
 
         ImagesHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_image, parent, false));
 
-            mTextView = itemView.findViewById(R.id.textView);
+            mImageView = itemView.findViewById(R.id.list_item_image);
         }
 
-        void bind(String element) {
-            this.mElement = element;
-
-            mTextView.setText(element);
+        void bind(ByteArrayOutputStream byteArrayOutputStream) {
+            Bitmap bmp = BitmapFactory.decodeStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+            mImageView.setImageBitmap(bmp);
         }
     }
 
     private class ImageAdapter extends RecyclerView.Adapter<ImagesHolder> {
-        private List<String> mData;
+        private List<ByteArrayOutputStream> mData;
 
-        ImageAdapter(List<String> data) {
+        ImageAdapter(List<ByteArrayOutputStream> data) {
             this.mData = data;
         }
 
@@ -81,7 +106,7 @@ public class ListImagesFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ImagesHolder holder, int position) {
-            String value = mData.get(position);
+            ByteArrayOutputStream value = mData.get(position);
             holder.bind(value);
         }
 
