@@ -33,6 +33,8 @@
                 <data android:scheme="com.yandex.gallery.oauth" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".OneImageActivity" />
     </application>
 
 </manifest>
