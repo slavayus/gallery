@@ -2,11 +2,13 @@ package com.yandex.gallery;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,6 @@ import android.widget.ImageView;
 
 import com.yandex.disk.rest.json.Resource;
 import com.yandex.gallery.tasks.BackgroundResponse;
-import com.yandex.gallery.tasks.BackgroundStatus;
 import com.yandex.gallery.tasks.DownloadImagesTask;
 import com.yandex.gallery.tasks.LastUploadedTask;
 
@@ -31,11 +32,20 @@ public class ListImagesFragment extends Fragment {
 
     private String mToken;
     private RecyclerView mImagesRecyclerView;
+    private Point display;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mToken = getArguments().getString("token");
+        display = calculateDisplaySize();
+    }
+
+    private Point calculateDisplaySize() {
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size;
     }
 
     @Nullable
@@ -77,7 +87,8 @@ public class ListImagesFragment extends Fragment {
     private List<Bitmap> decodeResponse(List<ByteArrayOutputStream> data) {
         List<Bitmap> bitmaps = new ArrayList<>();
         for (ByteArrayOutputStream byteArrayOutputStream : data) {
-            bitmaps.add(BitmapFactory.decodeStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray())));
+            Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+            bitmaps.add(Bitmap.createScaledBitmap(bitmap, display.x / 2, display.x / 2, false));
         }
         return bitmaps;
     }
@@ -88,16 +99,23 @@ public class ListImagesFragment extends Fragment {
     }
 
     private class ImagesHolder extends RecyclerView.ViewHolder {
-        private final ImageView mImageView;
+        private final ImageView mImageViewLeft;
+        private final ImageView mImageViewRight;
 
         ImagesHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_image, parent, false));
 
-            mImageView = itemView.findViewById(R.id.list_item_image);
+            mImageViewLeft = itemView.findViewById(R.id.list_item_image_left);
+            mImageViewRight = itemView.findViewById(R.id.list_item_image_right);
         }
 
-        void bind(Bitmap image) {
-            mImageView.setImageBitmap(image);
+        void bind(Bitmap leftImage, Bitmap rightImage) {
+            mImageViewLeft.setImageBitmap(leftImage);
+            mImageViewRight.setImageBitmap(rightImage);
+        }
+
+        void bind(Bitmap leftImage) {
+            mImageViewLeft.setImageBitmap(leftImage);
         }
     }
 
@@ -116,13 +134,16 @@ public class ListImagesFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ImagesHolder holder, int position) {
-            Bitmap value = mData.get(position);
-            holder.bind(value);
+            if ((2 * position + 1) < mData.size()) {
+                holder.bind(mData.get(2 * position), mData.get(2 * position + 1));
+            } else {
+                holder.bind(mData.get(2 * position));
+            }
         }
 
         @Override
         public int getItemCount() {
-            return mData.size();
+            return (mData.size() + 1) / 2;
         }
     }
 
