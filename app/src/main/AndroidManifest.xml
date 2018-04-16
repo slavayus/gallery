@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".OAuthActivity">
+        <activity android:name=".ListImagesActivity">
             <intent-filter>
                 <action android:name="com.yandex.gallery.oauth" />
 
