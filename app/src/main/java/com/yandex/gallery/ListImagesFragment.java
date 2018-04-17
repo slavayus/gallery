@@ -8,20 +8,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.yandex.disk.rest.json.Resource;
+import com.yandex.gallery.helper.ImageHelper;
 import com.yandex.gallery.tasks.BackgroundResponse;
 import com.yandex.gallery.tasks.DownloadImagesTask;
 import com.yandex.gallery.tasks.LastUploadedTask;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,24 +27,19 @@ import java.util.List;
  */
 
 public class ListImagesFragment extends Fragment {
+    private static final String LOG_TAG = "ListImagesFragment";
 
     private String mToken;
     private RecyclerView mImagesRecyclerView;
-    private Point display;
+    private Point mDisplay;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mToken = getArguments().getString("token");
-        display = calculateDisplaySize();
+        this.mDisplay = ImageHelper.calculateDisplaySize(this);
     }
 
-    private Point calculateDisplaySize() {
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        return size;
-    }
 
     @Nullable
     @Override
@@ -75,22 +68,13 @@ public class ListImagesFragment extends Fragment {
     public void onDownloadImages(BackgroundResponse response) {
         switch (response.getStatus()) {
             case OK: {
-                List<Bitmap> bitmaps = decodeResponse(((List<ByteArrayOutputStream>) response.getData()));
+                List<Bitmap> bitmaps = ImageHelper.decodeImages((List<ByteArrayOutputStream>) response.getData(), mDisplay);
                 updateUI(bitmaps);
                 break;
             }
             //TODO:dialog
             case ERROR:
         }
-    }
-
-    private List<Bitmap> decodeResponse(List<ByteArrayOutputStream> data) {
-        List<Bitmap> bitmaps = new ArrayList<>();
-        for (ByteArrayOutputStream byteArrayOutputStream : data) {
-            Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
-            bitmaps.add(Bitmap.createScaledBitmap(bitmap, display.x / 2 - 3, display.x / 2, false));
-        }
-        return bitmaps;
     }
 
     private void updateUI(List<Bitmap> data) {

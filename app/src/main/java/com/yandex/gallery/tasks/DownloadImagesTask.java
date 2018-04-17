@@ -1,6 +1,7 @@
 package com.yandex.gallery.tasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.yandex.disk.rest.Credentials;
 import com.yandex.disk.rest.DownloadListener;
@@ -21,6 +22,8 @@ import java.util.List;
  */
 
 public class DownloadImagesTask extends AsyncTask<String, Void, BackgroundResponse> {
+    private static final String LOG_TAG = "DownloadImagesTask";
+
     private final List<Resource> resources;
     private final ListImagesFragment listImagesFragment;
 
@@ -31,6 +34,8 @@ public class DownloadImagesTask extends AsyncTask<String, Void, BackgroundRespon
 
     @Override
     protected BackgroundResponse doInBackground(String... data) {
+        Log.d(LOG_TAG, "start doInBackground");
+        long start = System.currentTimeMillis();
         final List<ByteArrayOutputStream> outputStreams = new ArrayList<>();
         try {
             Credentials credentials = new Credentials("", data[0]);
@@ -57,12 +62,15 @@ public class DownloadImagesTask extends AsyncTask<String, Void, BackgroundRespon
             return new BackgroundResponse<List<ByteArrayOutputStream>>(BackgroundStatus.OK)
                     .addMessage(listImagesFragment.getString(R.string.there_was_a_problem_with_the_yandex_server) +
                             " (" + e.getMessage() + ")");
+        } finally {
+            Log.d(LOG_TAG, "end doInBackground, elapsed time = " + (System.currentTimeMillis() - start));
         }
     }
 
 
     @Override
     protected void onPostExecute(BackgroundResponse response) {
+        Log.d(LOG_TAG, "start onPostExecute");
         listImagesFragment.onDownloadImages(response);
     }
 }
