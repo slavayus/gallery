@@ -6,6 +6,10 @@
     android:orientation="vertical"
     android:scrollbarStyle="outsideOverlay">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,8 +25,7 @@
 
         <View
             android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/darker_gray"/>
+            android:layout_height="match_parent"/>
 
         <ImageView
             android:id="@+id/list_item_image_right"
@@ -33,10 +36,5 @@
             app:srcCompat="@color/colorPrimaryDark" />
     </LinearLayout>
 
-    <View
-        android:id="@+id/design_bottom_line"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/darker_gray"/>
 
 </LinearLayout>
