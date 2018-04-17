@@ -3,8 +3,13 @@ package com.yandex.gallery.helper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Display;
@@ -57,7 +62,8 @@ public final class ImageHelper {
                 int centerWidthImage = imageWidth / 2;
 
                 Bitmap bitmap = bitmapRegionDecoder.decodeRegion(new Rect(centerWidthImage - minSide / 2, centerHeightImage - minSide / 2, centerWidthImage + minSide / 2, centerHeightImage + minSide / 2), sOptions);
-                bitmaps.add(Bitmap.createScaledBitmap(bitmap, display.x / 2 - 3, display.x / 2, false));
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, display.x / 2 - 3, display.x / 2, false);
+                bitmaps.add(getRoundedCornerBitmap(scaledBitmap));
             } catch (IOException e) {
                 //TODO
                 e.printStackTrace();
@@ -68,4 +74,26 @@ public final class ImageHelper {
 
         return bitmaps;
     }
+
+
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+        final float roundPx = 12;
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
+    }
+
 }

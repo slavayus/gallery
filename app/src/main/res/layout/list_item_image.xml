@@ -19,7 +19,6 @@
             android:id="@+id/list_item_image_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
             android:contentDescription="@string/right_image_description"
             app:srcCompat="@color/colorPrimaryDark" />
 
@@ -31,7 +30,6 @@
             android:id="@+id/list_item_image_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
             android:contentDescription="@string/left_image_description"
             app:srcCompat="@color/colorPrimaryDark" />
     </LinearLayout>
