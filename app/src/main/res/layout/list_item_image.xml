@@ -19,6 +19,10 @@
             android:contentDescription="@string/right_image_description"
             app:srcCompat="@color/colorPrimaryDark" />
 
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"/>
 
         <ImageView
             android:id="@+id/list_item_image_right"
@@ -32,6 +36,7 @@
     <View
         android:id="@+id/design_bottom_line"
         android:layout_width="match_parent"
-        android:layout_height="3dp"/>
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray"/>
 
 </LinearLayout>

@@ -31,7 +31,7 @@ public class LastUploadedTask extends AsyncTask<String, Void, BackgroundResponse
             Credentials credentials = new Credentials("", data[0]);
 
             RestClient restClient = new RestClient(credentials);
-            ResourceList resourceList = restClient.getLastUploadedResources(new ResourcesArgs.Builder().setMediaType("image").setLimit(5).build());
+            ResourceList resourceList = restClient.getLastUploadedResources(new ResourcesArgs.Builder().setMediaType("image").setLimit(4).build());
 
             return new BackgroundResponse<List<Resource>>(BackgroundStatus.OK).addData(resourceList.getItems());
         } catch (IOException e) {

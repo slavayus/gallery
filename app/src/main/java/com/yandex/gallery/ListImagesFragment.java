@@ -88,7 +88,7 @@ public class ListImagesFragment extends Fragment {
         List<Bitmap> bitmaps = new ArrayList<>();
         for (ByteArrayOutputStream byteArrayOutputStream : data) {
             Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
-            bitmaps.add(Bitmap.createScaledBitmap(bitmap, display.x / 2, display.x / 2, false));
+            bitmaps.add(Bitmap.createScaledBitmap(bitmap, display.x / 2 - 3, display.x / 2, false));
         }
         return bitmaps;
     }
