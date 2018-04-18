@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,14 +32,23 @@ public class ListImagesFragment extends Fragment {
     private String mToken;
     private RecyclerView mImagesRecyclerView;
     private Point mDisplay;
+    private Bitmap mEmptyBitmap;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mToken = getArguments().getString("token");
-        this.mDisplay = ImageHelper.calculateDisplaySize(this);
+        this.mDisplay = calculateDisplaySize(this);
+        this.mEmptyBitmap = ImageHelper.createEmptyImage(mDisplay, this);
+
     }
 
+    public Point calculateDisplaySize(Fragment fragment) {
+        Display display = fragment.getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size;
+    }
 
     @Nullable
     @Override

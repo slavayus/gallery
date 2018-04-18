@@ -10,9 +10,10 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Display;
+
+import com.yandex.gallery.ListImagesFragment;
+import com.yandex.gallery.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -27,12 +28,6 @@ public final class ImageHelper {
     private static final String LOG_TAG = "ImageHelper";
     private static BitmapFactory.Options sOptions;
 
-    public static Point calculateDisplaySize(Fragment fragment) {
-        Display display = fragment.getActivity().getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        return size;
-    }
 
     static {
         setUpOptions();
@@ -96,4 +91,11 @@ public final class ImageHelper {
         return output;
     }
 
+
+    public static Bitmap createEmptyImage(Point mDisplay, ListImagesFragment listImagesFragment) {
+        Bitmap bitmap = Bitmap.createBitmap(mDisplay.x / 2 - 3, mDisplay.x / 2, Bitmap.Config.RGB_565);
+        bitmap.eraseColor(listImagesFragment.getResources().getColor(R.color.backgroundColorEmptyImage));
+
+        return getRoundedCornerBitmap(bitmap);
+    }
 }
