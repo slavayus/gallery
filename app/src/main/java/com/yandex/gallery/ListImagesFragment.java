@@ -1,7 +1,6 @@
 package com.yandex.gallery;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -49,6 +48,7 @@ public class ListImagesFragment extends Fragment {
         mImagesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         new LastUploadedTask(this).execute(mToken);
+//        new FlatResourceListTask(this).execute(mToken);
 
         return view;
     }
@@ -57,6 +57,7 @@ public class ListImagesFragment extends Fragment {
         switch (response.getStatus()) {
             case OK: {
                 new DownloadImagesTask((List<Resource>) response.getData(), this).execute(mToken);
+//                new DownloadPreviewImagesTask((List<Resource>) response.getData(), this).execute();
                 break;
             }
             //TODO:dialog
@@ -69,6 +70,7 @@ public class ListImagesFragment extends Fragment {
         switch (response.getStatus()) {
             case OK: {
                 List<Bitmap> bitmaps = ImageHelper.decodeImages((List<ByteArrayOutputStream>) response.getData(), mDisplay);
+//                List<Bitmap> bitmaps = (List<Bitmap>) response.getData();
                 updateUI(bitmaps);
                 break;
             }

@@ -41,7 +41,9 @@ public class DownloadImagesTask extends AsyncTask<String, Void, BackgroundRespon
             Credentials credentials = new Credentials("", data[0]);
 
             RestClient restClient = new RestClient(credentials);
+            int i = 0;
             for (Resource resource : resources) {
+                Log.d(LOG_TAG, "download " + i++ + " image");
                 restClient.downloadFile(resource.getPath().getPath(), new DownloadListener() {
                     @Override
                     public OutputStream getOutputStream(boolean append) throws IOException {
@@ -54,12 +56,12 @@ public class DownloadImagesTask extends AsyncTask<String, Void, BackgroundRespon
             return new BackgroundResponse<List<ByteArrayOutputStream>>(BackgroundStatus.OK).addData(outputStreams);
         } catch (IOException e) {
             e.printStackTrace();
-            return new BackgroundResponse<List<ByteArrayOutputStream>>(BackgroundStatus.OK)
+            return new BackgroundResponse<List<ByteArrayOutputStream>>(BackgroundStatus.ERROR)
                     .addMessage(listImagesFragment.getString(R.string.there_was_a_problem_with_the_network) +
                             " (" + e.getMessage() + ")");
         } catch (ServerException e) {
             e.printStackTrace();
-            return new BackgroundResponse<List<ByteArrayOutputStream>>(BackgroundStatus.OK)
+            return new BackgroundResponse<List<ByteArrayOutputStream>>(BackgroundStatus.ERROR)
                     .addMessage(listImagesFragment.getString(R.string.there_was_a_problem_with_the_yandex_server) +
                             " (" + e.getMessage() + ")");
         } finally {
