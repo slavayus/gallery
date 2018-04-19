@@ -21,7 +21,7 @@ import com.yandex.gallery.tasks.DownloadImagesTask;
 import com.yandex.gallery.tasks.LastUploadedTask;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,14 +30,12 @@ import java.util.List;
 
 public class ListImagesFragment extends Fragment {
     private static final String LOG_TAG = "ListImagesFragment";
-    private static final int sMaxImages = 100;
 
     private String mToken;
     private RecyclerView mImagesRecyclerView;
     private Point mDisplay;
     private Bitmap mEmptyBitmap;
     private ImageAdapter mImageAdapter;
-    private List<Bitmap> mEmptyBitmaps = new ArrayList<>();
     private int mCurrentImageIndex;
 
     @Override
@@ -63,13 +61,8 @@ public class ListImagesFragment extends Fragment {
         mImagesRecyclerView = view.findViewById(R.id.images_recycler_view);
         mImagesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        for (int i = 0; i < sMaxImages; i++) {
-            mEmptyBitmaps.add(mEmptyBitmap);
-        }
-
 //        new FlatResourceListTask(this, mCurrentImageIndex).execute(mToken);
-          new LastUploadedTask(this, mCurrentImageIndex).execute(mToken);
-
+        new LastUploadedTask(this, mCurrentImageIndex).execute(mToken);
 
         updateUI();
 
@@ -94,12 +87,10 @@ public class ListImagesFragment extends Fragment {
             case OK: {
                 Bitmap bitmap = ImageHelper.decodeImages((ByteArrayOutputStream) response.getData(), mDisplay);
 
-                updateItem(bitmap);
+                mImageAdapter.updateItem(bitmap);
 
-                if (mCurrentImageIndex++ < sMaxImages) {
-//                    new FlatResourceListTask(this, mCurrentImageIndex).execute(mToken);
-                    new LastUploadedTask(this, mCurrentImageIndex).execute(mToken);
-                }
+//                    new FlatResourceListTask(this, ++mCurrentImageIndex).execute(mToken);
+                new LastUploadedTask(this, ++mCurrentImageIndex).execute(mToken);
 
                 break;
             }
@@ -108,15 +99,8 @@ public class ListImagesFragment extends Fragment {
         }
     }
 
-    public void updateItem(Bitmap bitmap) {
-        mEmptyBitmaps.remove(mCurrentImageIndex);
-        mEmptyBitmaps.add(mCurrentImageIndex, bitmap);
-        mImageAdapter.notifyDataSetChanged();
-        Log.d(LOG_TAG, "data set notified");
-    }
-
     private void updateUI() {
-        mImageAdapter = new ImageAdapter(mEmptyBitmaps);
+        mImageAdapter = new ImageAdapter(Collections.singletonList(mEmptyBitmap));
         mImagesRecyclerView.setAdapter(mImageAdapter);
     }
 
@@ -166,6 +150,13 @@ public class ListImagesFragment extends Fragment {
         @Override
         public int getItemCount() {
             return (mData.size() + 1) / 2;
+        }
+
+
+        void updateItem(Bitmap bitmap) {
+            this.mData.add(mCurrentImageIndex, bitmap);
+            this.notifyDataSetChanged();
+            Log.d(LOG_TAG, "data set notified");
         }
     }
 
