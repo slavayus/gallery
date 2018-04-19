@@ -12,7 +12,6 @@ import com.yandex.gallery.ListImagesFragment;
 import com.yandex.gallery.R;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by slavik on 4/18/18.
@@ -20,9 +19,11 @@ import java.util.List;
 
 public class FlatResourceListTask extends AsyncTask<String, Void, BackgroundResponse> {
     private final ListImagesFragment listImagesFragment;
+    private final int mCurrentImageIndex;
 
-    public FlatResourceListTask(ListImagesFragment listImagesFragment) {
+    public FlatResourceListTask(ListImagesFragment listImagesFragment, int mCurrentImageIndex) {
         this.listImagesFragment = listImagesFragment;
+        this.mCurrentImageIndex = mCurrentImageIndex;
     }
 
     @Override
@@ -31,18 +32,18 @@ public class FlatResourceListTask extends AsyncTask<String, Void, BackgroundResp
             Credentials credentials = new Credentials("", data[0]);
 
             RestClient restClient = new RestClient(credentials);
-            ResourceList resourceList = restClient.getFlatResourceList(new ResourcesArgs.Builder().setMediaType("image").setLimit(3).setPreviewCrop(true).setPreviewSize("S").build());
+            ResourceList resourceList = restClient.getFlatResourceList(new ResourcesArgs.Builder().setMediaType("image").setLimit(1).setOffset(mCurrentImageIndex).build());
 
-            return new BackgroundResponse<List<Resource>>(BackgroundStatus.OK).addData(resourceList.getItems());
+            return new BackgroundResponse<Resource>(BackgroundStatus.OK).addData(resourceList.getItems().get(0));
         } catch (IOException e) {
             e.printStackTrace();
-            return new BackgroundResponse<List<Resource>>(BackgroundStatus.ERROR)
+            return new BackgroundResponse(BackgroundStatus.ERROR)
                     .addMessage(listImagesFragment.getString(R.string.there_was_a_problem_with_the_network) +
                             " (" + e.getMessage() + ")");
 
         } catch (ServerIOException e) {
             e.printStackTrace();
-            return new BackgroundResponse<List<Resource>>(BackgroundStatus.ERROR)
+            return new BackgroundResponse(BackgroundStatus.ERROR)
                     .addMessage(listImagesFragment.getString(R.string.there_was_a_problem_with_the_yandex_server) +
                             " (" + e.getMessage() + ")");
         }

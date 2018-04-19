@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.yandex.gallery.tasks.DownloadImagesTask;
 import com.yandex.gallery.tasks.LastUploadedTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,11 +30,15 @@ import java.util.List;
 
 public class ListImagesFragment extends Fragment {
     private static final String LOG_TAG = "ListImagesFragment";
+    private static final int sMaxImages = 100;
 
     private String mToken;
     private RecyclerView mImagesRecyclerView;
     private Point mDisplay;
     private Bitmap mEmptyBitmap;
+    private ImageAdapter mImageAdapter;
+    private List<Bitmap> mEmptyBitmaps = new ArrayList<>();
+    private int mCurrentImageIndex;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +46,7 @@ public class ListImagesFragment extends Fragment {
         this.mToken = getArguments().getString("token");
         this.mDisplay = calculateDisplaySize(this);
         this.mEmptyBitmap = ImageHelper.createEmptyImage(mDisplay, this);
-
+        this.mCurrentImageIndex = 0;
     }
 
     public Point calculateDisplaySize(Fragment fragment) {
@@ -57,8 +63,15 @@ public class ListImagesFragment extends Fragment {
         mImagesRecyclerView = view.findViewById(R.id.images_recycler_view);
         mImagesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        new LastUploadedTask(this).execute(mToken);
-//        new FlatResourceListTask(this).execute(mToken);
+        for (int i = 0; i < sMaxImages; i++) {
+            mEmptyBitmaps.add(mEmptyBitmap);
+        }
+
+//        new FlatResourceListTask(this, mCurrentImageIndex).execute(mToken);
+          new LastUploadedTask(this, mCurrentImageIndex).execute(mToken);
+
+
+        updateUI();
 
         return view;
     }
@@ -66,7 +79,7 @@ public class ListImagesFragment extends Fragment {
     public void onGetLastUploadedImages(BackgroundResponse response) {
         switch (response.getStatus()) {
             case OK: {
-                new DownloadImagesTask((List<Resource>) response.getData(), this).execute(mToken);
+                new DownloadImagesTask((Resource) response.getData(), this).execute(mToken);
 //                new DownloadPreviewImagesTask((List<Resource>) response.getData(), this).execute();
                 break;
             }
@@ -79,9 +92,15 @@ public class ListImagesFragment extends Fragment {
     public void onDownloadImages(BackgroundResponse response) {
         switch (response.getStatus()) {
             case OK: {
-                List<Bitmap> bitmaps = ImageHelper.decodeImages((List<ByteArrayOutputStream>) response.getData(), mDisplay);
-//                List<Bitmap> bitmaps = (List<Bitmap>) response.getData();
-                updateUI(bitmaps);
+                Bitmap bitmap = ImageHelper.decodeImages((ByteArrayOutputStream) response.getData(), mDisplay);
+
+                updateItem(bitmap);
+
+                if (mCurrentImageIndex++ < sMaxImages) {
+//                    new FlatResourceListTask(this, mCurrentImageIndex).execute(mToken);
+                    new LastUploadedTask(this, mCurrentImageIndex).execute(mToken);
+                }
+
                 break;
             }
             //TODO:dialog
@@ -89,9 +108,16 @@ public class ListImagesFragment extends Fragment {
         }
     }
 
-    private void updateUI(List<Bitmap> data) {
-        ImageAdapter imageAdapter = new ImageAdapter(data);
-        mImagesRecyclerView.setAdapter(imageAdapter);
+    public void updateItem(Bitmap bitmap) {
+        mEmptyBitmaps.remove(mCurrentImageIndex);
+        mEmptyBitmaps.add(mCurrentImageIndex, bitmap);
+        mImageAdapter.notifyDataSetChanged();
+        Log.d(LOG_TAG, "data set notified");
+    }
+
+    private void updateUI() {
+        mImageAdapter = new ImageAdapter(mEmptyBitmaps);
+        mImagesRecyclerView.setAdapter(mImageAdapter);
     }
 
     private class ImagesHolder extends RecyclerView.ViewHolder {
