@@ -9,11 +9,13 @@ import android.support.v4.app.Fragment;
  */
 
 public class OneImageActivity extends SingleFragmentActivity {
-    public static final String EXTRA_IMAGE = "com.yandex.gallery.extra_image";
+    private static final String EXTRA_IMAGE = "com.yandex.gallery.extra_image";
 
     @Override
     protected Fragment createFragment() {
-        return new OneImageFragment();
+        int index = getIntent().getIntExtra(EXTRA_IMAGE, 0);
+
+        return OneImageFragment.newInstance(index);
     }
 
     public static Intent newIntent(Context context, int position) {

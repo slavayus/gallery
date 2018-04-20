@@ -17,15 +17,16 @@ import com.yandex.gallery.helper.Images;
  */
 
 public class OneImageFragment extends Fragment {
-    private Bitmap image;
+    private Bitmap mImage;
+    private static final String IMAGE_INDEX = "image_index";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int index = getActivity().getIntent().getIntExtra(OneImageActivity.EXTRA_IMAGE, 0);
+        int index = getArguments().getInt(IMAGE_INDEX);
         byte[] image = Images.getImage(index).toByteArray();
-        this.image = BitmapFactory.decodeByteArray(image, 0, image.length);
+        this.mImage = BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
     @Nullable
@@ -34,8 +35,18 @@ public class OneImageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_one_image, container, false);
 
         ImageView imageView = view.findViewById(R.id.one_image_view);
-        imageView.setImageBitmap(image);
+        imageView.setImageBitmap(mImage);
 
         return view;
     }
+
+    public static OneImageFragment newInstance(final int index) {
+        Bundle args = new Bundle();
+        args.putInt(IMAGE_INDEX, index);
+
+        OneImageFragment oneImageFragment = new OneImageFragment();
+        oneImageFragment.setArguments(args);
+        return oneImageFragment;
+    }
+
 }
