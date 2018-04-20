@@ -21,7 +21,7 @@ import com.yandex.gallery.tasks.DownloadImagesTask;
 import com.yandex.gallery.tasks.LastUploadedTask;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -100,7 +100,9 @@ public class ListImagesFragment extends Fragment {
     }
 
     private void updateUI() {
-        mImageAdapter = new ImageAdapter(Collections.singletonList(mEmptyBitmap));
+        List<Bitmap> bitmaps = new ArrayList<>();
+        bitmaps.add(mEmptyBitmap);
+        mImageAdapter = new ImageAdapter(bitmaps);
         mImagesRecyclerView.setAdapter(mImageAdapter);
     }
 
