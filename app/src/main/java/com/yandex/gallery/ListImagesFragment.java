@@ -1,5 +1,6 @@
 package com.yandex.gallery;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.yandex.disk.rest.json.Resource;
 import com.yandex.gallery.helper.ImageHelper;
@@ -129,7 +129,7 @@ public class ListImagesFragment extends Fragment {
             mImageViewLeft.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(getContext(), "Left image clicked", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getActivity(), OneImageActivity.class));
                 }
             });
         }
@@ -138,7 +138,7 @@ public class ListImagesFragment extends Fragment {
             mImageViewRight.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(getContext(), "Right image clicked", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getActivity(), OneImageActivity.class));
                 }
             });
         }
