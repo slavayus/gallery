@@ -17,8 +17,6 @@ import com.yandex.gallery.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by slavik on 4/17/18.
@@ -40,34 +38,31 @@ public final class ImageHelper {
     }
 
 
-    public static List<Bitmap> decodeImages(List<ByteArrayOutputStream> data, Point display) {
+    public static Bitmap decodeImages(ByteArrayOutputStream data, Point display) {
         Log.d(LOG_TAG, " start decodeImages");
-
-        List<Bitmap> bitmaps = new ArrayList<>();
+        Bitmap bitmap = null;
         long start = System.currentTimeMillis();
-        for (ByteArrayOutputStream byteArrayOutputStream : data) {
-            try {
-                BitmapRegionDecoder bitmapRegionDecoder = BitmapRegionDecoder.newInstance(byteArrayOutputStream.toByteArray(), 0, byteArrayOutputStream.toByteArray().length, false);
+        try {
+            BitmapRegionDecoder bitmapRegionDecoder = BitmapRegionDecoder.newInstance(data.toByteArray(), 0, data.toByteArray().length, false);
 
-                int imageHeight = bitmapRegionDecoder.getHeight();
-                int imageWidth = bitmapRegionDecoder.getWidth();
+            int imageHeight = bitmapRegionDecoder.getHeight();
+            int imageWidth = bitmapRegionDecoder.getWidth();
 
-                int minSide = imageHeight > imageWidth ? imageWidth : imageHeight;
-                int centerHeightImage = imageHeight / 2;
-                int centerWidthImage = imageWidth / 2;
+            int minSide = imageHeight > imageWidth ? imageWidth : imageHeight;
+            int centerHeightImage = imageHeight / 2;
+            int centerWidthImage = imageWidth / 2;
 
-                Bitmap bitmap = bitmapRegionDecoder.decodeRegion(new Rect(centerWidthImage - minSide / 2, centerHeightImage - minSide / 2, centerWidthImage + minSide / 2, centerHeightImage + minSide / 2), sOptions);
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, display.x / 2 - 3, display.x / 2, false);
-                bitmaps.add(getRoundedCornerBitmap(scaledBitmap));
-            } catch (IOException e) {
-                //TODO
-                e.printStackTrace();
-            }
+            bitmap = bitmapRegionDecoder.decodeRegion(new Rect(centerWidthImage - minSide / 2, centerHeightImage - minSide / 2, centerWidthImage + minSide / 2, centerHeightImage + minSide / 2), sOptions);
+            bitmap = Bitmap.createScaledBitmap(bitmap, display.x / 2 - 3, display.x / 2, false);
+            bitmap = getRoundedCornerBitmap(bitmap);
+        } catch (IOException e) {
+            //TODO
+            e.printStackTrace();
         }
 
         Log.d(LOG_TAG, " end decodeImages, elapsed time = " + (System.currentTimeMillis() - start));
 
-        return bitmaps;
+        return bitmap;
     }
 
 

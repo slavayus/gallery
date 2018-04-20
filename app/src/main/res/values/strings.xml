@@ -12,4 +12,5 @@
     <string name="last_uploaded_image">last uploaded image</string>
     <string name="left_image_description">There is a left image</string>
     <string name="right_image_description">There is a right image</string>
+    <string name="one_image">one image</string>
 </resources>
