@@ -64,7 +64,7 @@ public class ListImagesFragment extends Fragment {
         mImagesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 //        new FlatResourceListTask(this, mCurrentImageIndex).execute(mToken);
-        new LastUploadedTask(this, mCurrentImageIndex).execute(mToken);
+        new LastUploadedTask(this, mCurrentImageIndex++).execute(mToken);
 
         updateUI();
 
@@ -93,10 +93,14 @@ public class ListImagesFragment extends Fragment {
 
                 Bitmap bitmap = ImageHelper.decodeImageRegion(responseData, mDisplay);
 
-                mImageAdapter.updateItem(bitmap);
+                mImageAdapter.addImage(bitmap);
+
+                if (mCurrentImageIndex % 2 == 0) {
+                    mImageAdapter.updateItem();
+                }
 
 //                    new FlatResourceListTask(this, ++mCurrentImageIndex).execute(mToken);
-                new LastUploadedTask(this, ++mCurrentImageIndex).execute(mToken);
+                new LastUploadedTask(this, mCurrentImageIndex++).execute(mToken);
 
                 break;
             }
@@ -108,6 +112,8 @@ public class ListImagesFragment extends Fragment {
     private void updateUI() {
         List<Bitmap> bitmaps = new ArrayList<>();
         bitmaps.add(mEmptyBitmap);
+        bitmaps.add(mEmptyBitmap);
+
         mImageAdapter = new ImageAdapter(bitmaps);
         mImagesRecyclerView.setAdapter(mImageAdapter);
     }
@@ -123,35 +129,29 @@ public class ListImagesFragment extends Fragment {
             mImageViewRight = itemView.findViewById(R.id.list_item_image_right);
         }
 
-        void bind(Bitmap leftImage, Bitmap rightImage, int position) {
+        void bind(Bitmap leftImage, Bitmap rightImage, final int position) {
             mImageViewLeft.setImageBitmap(leftImage);
             mImageViewRight.setImageBitmap(rightImage);
             setLeftImageListener(position);
-            setRightImageListener(position+1);
         }
 
-        void bind(Bitmap leftImage, final int position) {
-            mImageViewLeft.setImageBitmap(leftImage);
-            setLeftImageListener(position);
+        void doOnClick(int position) {
+            Intent intent = OneImageActivity.newIntent(getActivity(), position);
+            startActivity(intent);
         }
 
         private void setLeftImageListener(final int position) {
             mImageViewLeft.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = OneImageActivity.newIntent(getActivity(), position);
-                    startActivity(intent);
+                    doOnClick(position);
                 }
             });
-        }
 
-
-        private void setRightImageListener(final int position) {
             mImageViewRight.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = OneImageActivity.newIntent(getActivity(), position);
-                    startActivity(intent);
+                    doOnClick(position + 1);
                 }
             });
         }
@@ -172,22 +172,20 @@ public class ListImagesFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ImagesHolder holder, int position) {
-            if ((2 * position + 1) < mData.size()) {
-                holder.bind(mData.get(2 * position), mData.get(2 * position + 1), 2 * position);
-            } else {
-                holder.bind(mData.get(2 * position), 2 * position);
-            }
+            holder.bind(mData.get(2 * position), mData.get(2 * position + 1), 2 * position);
         }
 
         @Override
         public int getItemCount() {
-            return (mData.size() + 1) / 2;
+            return mData.size() / 2;
         }
 
+        void addImage(Bitmap bitmap) {
+            this.mData.add(mCurrentImageIndex - 1, bitmap);
+        }
 
-        void updateItem(Bitmap bitmap) {
-            this.mData.add(mCurrentImageIndex, bitmap);
-            this.notifyDataSetChanged();
+        void updateItem() {
+            this.notifyItemInserted((mCurrentImageIndex / 2) - 1);
             Log.d(LOG_TAG, "data set notified");
         }
     }

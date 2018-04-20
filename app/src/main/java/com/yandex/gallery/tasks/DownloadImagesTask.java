@@ -72,5 +72,6 @@ public class DownloadImagesTask extends AsyncTask<String, Void, BackgroundRespon
     protected void onPostExecute(BackgroundResponse response) {
         Log.d(LOG_TAG, "start onPostExecute");
         listImagesFragment.onDownloadImages(response);
+        Log.d(LOG_TAG, "end onPostExecute");
     }
 }
