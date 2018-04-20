@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.yandex.disk.rest.json.Resource;
 import com.yandex.gallery.helper.ImageHelper;
@@ -120,10 +121,32 @@ public class ListImagesFragment extends Fragment {
         void bind(Bitmap leftImage, Bitmap rightImage) {
             mImageViewLeft.setImageBitmap(leftImage);
             mImageViewRight.setImageBitmap(rightImage);
+            setLeftImageListener();
+            setRightImageListener();
         }
+
+        private void setLeftImageListener() {
+            mImageViewLeft.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getContext(), "Left image clicked", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        private void setRightImageListener() {
+            mImageViewRight.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getContext(), "Right image clicked", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
 
         void bind(Bitmap leftImage) {
             mImageViewLeft.setImageBitmap(leftImage);
+            setLeftImageListener();
         }
     }
 
