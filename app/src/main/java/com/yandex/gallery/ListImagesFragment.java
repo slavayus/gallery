@@ -17,6 +17,7 @@ import android.widget.ImageView;
 
 import com.yandex.disk.rest.json.Resource;
 import com.yandex.gallery.helper.ImageHelper;
+import com.yandex.gallery.helper.Images;
 import com.yandex.gallery.tasks.BackgroundResponse;
 import com.yandex.gallery.tasks.DownloadImagesTask;
 import com.yandex.gallery.tasks.LastUploadedTask;
@@ -86,7 +87,11 @@ public class ListImagesFragment extends Fragment {
     public void onDownloadImages(BackgroundResponse response) {
         switch (response.getStatus()) {
             case OK: {
-                Bitmap bitmap = ImageHelper.decodeImages((ByteArrayOutputStream) response.getData(), mDisplay);
+                ByteArrayOutputStream responseData = (ByteArrayOutputStream) response.getData();
+
+                Images.addImage(responseData);
+
+                Bitmap bitmap = ImageHelper.decodeImageRegion(responseData, mDisplay);
 
                 mImageAdapter.updateItem(bitmap);
 
@@ -118,35 +123,37 @@ public class ListImagesFragment extends Fragment {
             mImageViewRight = itemView.findViewById(R.id.list_item_image_right);
         }
 
-        void bind(Bitmap leftImage, Bitmap rightImage) {
+        void bind(Bitmap leftImage, Bitmap rightImage, int position) {
             mImageViewLeft.setImageBitmap(leftImage);
             mImageViewRight.setImageBitmap(rightImage);
-            setLeftImageListener();
-            setRightImageListener();
+            setLeftImageListener(position);
+            setRightImageListener(position+1);
         }
 
-        private void setLeftImageListener() {
+        void bind(Bitmap leftImage, final int position) {
+            mImageViewLeft.setImageBitmap(leftImage);
+            setLeftImageListener(position);
+        }
+
+        private void setLeftImageListener(final int position) {
             mImageViewLeft.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(getActivity(), OneImageActivity.class));
+                    Intent intent = OneImageActivity.newIntent(getActivity(), position);
+                    startActivity(intent);
                 }
             });
         }
 
-        private void setRightImageListener() {
+
+        private void setRightImageListener(final int position) {
             mImageViewRight.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(getActivity(), OneImageActivity.class));
+                    Intent intent = OneImageActivity.newIntent(getActivity(), position);
+                    startActivity(intent);
                 }
             });
-        }
-
-
-        void bind(Bitmap leftImage) {
-            mImageViewLeft.setImageBitmap(leftImage);
-            setLeftImageListener();
         }
     }
 
@@ -166,9 +173,9 @@ public class ListImagesFragment extends Fragment {
         @Override
         public void onBindViewHolder(ImagesHolder holder, int position) {
             if ((2 * position + 1) < mData.size()) {
-                holder.bind(mData.get(2 * position), mData.get(2 * position + 1));
+                holder.bind(mData.get(2 * position), mData.get(2 * position + 1), 2 * position);
             } else {
-                holder.bind(mData.get(2 * position));
+                holder.bind(mData.get(2 * position), 2 * position);
             }
         }
 

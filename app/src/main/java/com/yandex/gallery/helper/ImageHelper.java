@@ -38,8 +38,8 @@ public final class ImageHelper {
     }
 
 
-    public static Bitmap decodeImages(ByteArrayOutputStream data, Point display) {
-        Log.d(LOG_TAG, " start decodeImages");
+    public static Bitmap decodeImageRegion(ByteArrayOutputStream data, Point display) {
+        Log.d(LOG_TAG, " start decodeImageRegion");
         Bitmap bitmap = null;
         long start = System.currentTimeMillis();
         try {
