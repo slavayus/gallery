@@ -32,6 +32,7 @@ import java.util.List;
 
 public class ListImagesFragment extends Fragment {
     private static final String LOG_TAG = "ListImagesFragment";
+    private static final String TOKEN = "TOKEN";
 
     private String mToken;
     private RecyclerView mImagesRecyclerView;
@@ -43,7 +44,7 @@ public class ListImagesFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.mToken = getArguments().getString("token");
+        this.mToken = getArguments().getString(TOKEN);
         this.mDisplay = calculateDisplaySize(this);
         this.mEmptyBitmap = ImageHelper.createEmptyImage(mDisplay, this);
         this.mCurrentImageIndex = 0;
@@ -190,4 +191,12 @@ public class ListImagesFragment extends Fragment {
         }
     }
 
+    public static ListImagesFragment newInstance(String mToken) {
+        Bundle args = new Bundle();
+        args.putString(TOKEN, mToken);
+
+        ListImagesFragment listImagesFragment = new ListImagesFragment();
+        listImagesFragment.setArguments(args);
+        return listImagesFragment;
+    }
 }

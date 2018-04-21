@@ -30,7 +30,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".OneImagePagerActivity" />
+        <activity
+            android:name=".OneImagePagerActivity"
+            android:parentActivityName=".GalleryActivity" />
     </application>
 
 </manifest>
