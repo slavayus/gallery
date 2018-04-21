@@ -3,7 +3,6 @@ package com.yandex.gallery;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +23,7 @@ public class GalleryFragment extends Fragment {
 
         View fragment_gallery = inflater.inflate(R.layout.fragment_gallery, container, false);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        RegisterFragment registerFragment = new RegisterFragment();
-        registerFragment.show(fragmentManager, REGISTER_DIALOG);
+        new RegisterFragment().show(getFragmentManager(), REGISTER_DIALOG);
 
         return fragment_gallery;
     }

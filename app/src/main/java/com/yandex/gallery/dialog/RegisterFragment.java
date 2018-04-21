@@ -1,6 +1,5 @@
 package com.yandex.gallery.dialog;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,7 +7,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import com.yandex.gallery.R;
 import com.yandex.gallery.helper.OAuthHelper;
@@ -23,7 +24,7 @@ public class RegisterFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new AlertDialog.Builder(getActivity())
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.register_fragment_title)
                 .setMessage(R.string.register_fragment_text)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -34,7 +35,25 @@ public class RegisterFragment extends DialogFragment {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(OAuthHelper.getUri())));
                     }
                 })
-                .setNegativeButton(android.R.string.cancel, null)
+                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        if (keyCode == KeyEvent.KEYCODE_BACK) {
+                            getActivity().finishAffinity();
+                        }
+                        return false;
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getActivity().finishAffinity();
+                    }
+                })
                 .create();
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCancelable(false);
+        return alertDialog;
     }
 }
