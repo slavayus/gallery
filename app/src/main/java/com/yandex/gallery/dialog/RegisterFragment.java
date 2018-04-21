@@ -24,8 +24,8 @@ public class RegisterFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new AlertDialog.Builder(getActivity())
-                .setView(R.layout.dialog_register)
                 .setTitle(R.string.register_fragment_title)
+                .setMessage(R.string.register_fragment_text)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
                     @Override
