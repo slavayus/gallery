@@ -9,13 +9,17 @@ import java.util.List;
  */
 
 public class Images {
-    private static final List<ByteArrayOutputStream> images = new ArrayList<>();
+    private static final List<ByteArrayOutputStream> mImages = new ArrayList<>();
 
     public static void addImage(ByteArrayOutputStream image) {
-        images.add(image);
+        mImages.add(image);
     }
 
     public static ByteArrayOutputStream getImage(int index) {
-        return images.get(index);
+        return mImages.get(index);
+    }
+
+    public static List<ByteArrayOutputStream> getAll() {
+        return mImages;
     }
 }

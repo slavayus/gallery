@@ -132,15 +132,15 @@ public class ListImagesFragment extends Fragment {
         void bind(Bitmap leftImage, Bitmap rightImage, final int position) {
             mImageViewLeft.setImageBitmap(leftImage);
             mImageViewRight.setImageBitmap(rightImage);
-            setLeftImageListener(position);
+            setImageListeners(position);
         }
 
         void doOnClick(int position) {
-            Intent intent = OneImageActivity.newIntent(getActivity(), position);
+            Intent intent = OneImagePagerActivity.newIntent(getActivity(), position);
             startActivity(intent);
         }
 
-        private void setLeftImageListener(final int position) {
+        private void setImageListeners(final int position) {
             mImageViewLeft.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
