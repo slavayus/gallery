@@ -1,19 +1,14 @@
 package com.yandex.gallery;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.yandex.gallery.dialog.RegisterFragment;
-import com.yandex.gallery.helper.OAuthHelper;
 
 /**
  * Created by slavik on 4/15/18.
@@ -32,15 +27,6 @@ public class GalleryFragment extends Fragment {
         FragmentManager fragmentManager = getFragmentManager();
         RegisterFragment registerFragment = new RegisterFragment();
         registerFragment.show(fragmentManager, REGISTER_DIALOG);
-
-        Button button = fragment_gallery.findViewById(R.id.browser);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(LOG_TAG, " on click");
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(OAuthHelper.getUri())));
-            }
-        });
 
         return fragment_gallery;
     }
