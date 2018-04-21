@@ -32,7 +32,8 @@
 
         <activity
             android:name=".OneImagePagerActivity"
-            android:parentActivityName=".GalleryActivity" />
+            android:parentActivityName=".GalleryActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
