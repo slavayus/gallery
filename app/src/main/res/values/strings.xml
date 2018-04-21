@@ -13,4 +13,6 @@
     <string name="left_image_description">There is a left image</string>
     <string name="right_image_description">There is a right image</string>
     <string name="one_image">one image</string>
+    <string name="register_fragment_title">Авторизация</string>
+    <string name="register_fragment_text">Для продолжения работы необходима авторизация через Yandex</string>
 </resources>

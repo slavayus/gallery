@@ -5,12 +5,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.yandex.gallery.dialog.RegisterFragment;
 import com.yandex.gallery.helper.OAuthHelper;
 
 /**
@@ -19,12 +21,17 @@ import com.yandex.gallery.helper.OAuthHelper;
 
 public class GalleryFragment extends Fragment {
     private static final String LOG_TAG = "GalleryFragment";
+    private static final String REGISTER_DIALOG = "RegisterFragment";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View fragment_gallery = inflater.inflate(R.layout.fragment_gallery, container, false);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        RegisterFragment registerFragment = new RegisterFragment();
+        registerFragment.show(fragmentManager, REGISTER_DIALOG);
 
         Button button = fragment_gallery.findViewById(R.id.browser);
         button.setOnClickListener(new View.OnClickListener() {
