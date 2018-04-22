@@ -9,7 +9,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.yandex.gallery.animation.DepthPageTransformer;
 import com.yandex.gallery.helper.Images;
 
 import java.io.ByteArrayOutputStream;
@@ -21,6 +23,7 @@ import java.util.List;
 
 public class OneImagePagerActivity extends AppCompatActivity {
     private static final String EXTRA_IMAGE = "com.yandex.gallery.extra_image";
+    private static final String LOG_TAG = "OneImagePagerActivity";
 
     private ViewPager mViewPager;
     private List<ByteArrayOutputStream> mImages;
@@ -49,11 +52,19 @@ public class OneImagePagerActivity extends AppCompatActivity {
         });
 
         mViewPager.setCurrentItem(mIndex);
+        mViewPager.setPageTransformer(false, new DepthPageTransformer());
+        mViewPager.setOffscreenPageLimit(0);
     }
 
     public static Intent newIntent(Context context, int position) {
         Intent intent = new Intent(context, OneImagePagerActivity.class);
         intent.putExtra(EXTRA_IMAGE, position);
         return intent;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(LOG_TAG, "destroyed");
     }
 }

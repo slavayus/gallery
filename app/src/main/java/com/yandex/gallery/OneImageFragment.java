@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,8 @@ public class OneImageFragment extends Fragment {
     private static final String LOG_TAG = "OneImageFragment";
     private Bitmap mImage;
     private static final String IMAGE_INDEX = "image_index";
-    private boolean mIsHidden = false;
+    private boolean mIsHiddenActionBar = false;
+    private ImageView mImageView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,20 +46,34 @@ public class OneImageFragment extends Fragment {
 
                 ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
                 if (actionBar != null) {
-                    if (mIsHidden) {
+                    if (mIsHiddenActionBar) {
                         actionBar.show();
                     } else {
                         actionBar.hide();
                     }
-                    mIsHidden = !mIsHidden;
+                    mIsHiddenActionBar = !mIsHiddenActionBar;
                 }
             }
         });
 
-        ImageView imageView = view.findViewById(R.id.one_image_view);
-        imageView.setImageBitmap(mImage);
+        mImageView = view.findViewById(R.id.one_image_view);
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mImageView.setImageBitmap(mImage);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mImage.recycle();
+        mImage = null;
+        System.gc();
+        Log.d(LOG_TAG, "destroyed");
     }
 
     public static OneImageFragment newInstance(final int index) {
@@ -68,5 +84,4 @@ public class OneImageFragment extends Fragment {
         oneImageFragment.setArguments(args);
         return oneImageFragment;
     }
-
 }
