@@ -1,7 +1,6 @@
 package com.yandex.gallery;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.yandex.gallery.helper.ImageHelper;
 import com.yandex.gallery.helper.Images;
 
 /**
@@ -31,8 +31,7 @@ public class OneImageFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         int index = getArguments().getInt(IMAGE_INDEX);
-        byte[] image = Images.getImage(index).toByteArray();
-        this.mImage = BitmapFactory.decodeByteArray(image, 0, image.length);
+        this.mImage = ImageHelper.decodeImage(Images.getImage(index));
     }
 
     @Nullable

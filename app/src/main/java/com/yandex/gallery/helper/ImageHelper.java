@@ -65,6 +65,10 @@ public final class ImageHelper {
         return bitmap;
     }
 
+    public static Bitmap decodeImage(ByteArrayOutputStream image) {
+        byte[] data = image.toByteArray();
+        return BitmapFactory.decodeByteArray(data, 0, data.length, sOptions);
+    }
 
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
