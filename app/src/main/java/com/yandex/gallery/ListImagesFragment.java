@@ -96,6 +96,8 @@ public class ListImagesFragment extends Fragment {
 
                 mImageAdapter.addImage(bitmap);
 
+                OneImagePagerActivity.notifyAdapter();
+
                 if (mCurrentImageIndex % 2 == 0) {
                     mImageAdapter.updateItem();
                 }

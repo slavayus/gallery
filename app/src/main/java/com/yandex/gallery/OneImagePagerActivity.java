@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +24,7 @@ public class OneImagePagerActivity extends AppCompatActivity {
     private static final String EXTRA_IMAGE = "com.yandex.gallery.extra_image";
     private static final String LOG_TAG = "OneImagePagerActivity";
 
-    private ViewPager mViewPager;
+    private static ViewPager mViewPager;
     private List<ByteArrayOutputStream> mImages;
     private int mIndex;
 
@@ -38,8 +37,7 @@ public class OneImagePagerActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.one_image_view_pager);
         mImages = Images.getAll();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
+        mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return OneImageFragment.newInstance(position);
@@ -60,6 +58,13 @@ public class OneImagePagerActivity extends AppCompatActivity {
         Intent intent = new Intent(context, OneImagePagerActivity.class);
         intent.putExtra(EXTRA_IMAGE, position);
         return intent;
+    }
+
+    //TODO: stop this shit. I need some help.
+    public static void notifyAdapter() {
+        if (mViewPager != null) {
+            mViewPager.getAdapter().notifyDataSetChanged();
+        }
     }
 
     @Override
