@@ -25,6 +25,7 @@ public class OneImageFragment extends Fragment {
     private static final String IMAGE_INDEX = "image_index";
     private boolean mIsHiddenActionBar = false;
     private ImageView mImageView;
+    private int currentDegrees = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +39,20 @@ public class OneImageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_one_image, container, false);
+
+        view.findViewById(R.id.rotate_right_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mImageView.setImageBitmap(ImageHelper.rotateImage(mImage, currentDegrees += 90));
+            }
+        });
+
+        view.findViewById(R.id.rotate_left_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mImageView.setImageBitmap(ImageHelper.rotateImage(mImage, currentDegrees -= 90));
+            }
+        });
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override

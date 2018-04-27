@@ -19,4 +19,6 @@
     <string name="yandex_server_error_title">Ошибка</string>
     <string name="yandex_server_error_text">Возникли проблемы при работе с сервером Yandex</string>
     <string name="network_error_text">Возникли проблемы с сетью. Провертье подключение к сети.</string>
+    <string name="rotate_left_button">rotate left</string>
+    <string name="rotate_right_button">rotate right</string>
 </resources>

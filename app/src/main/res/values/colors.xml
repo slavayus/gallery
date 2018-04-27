@@ -6,4 +6,5 @@
     <color name="backgroundColor">#1D2733</color>
     <color name="emptyImageColor">#1A222D</color>
     <color name="transparent_black">#80000000</color>
+    <color name="rotateButtons">#D9D9D9</color>
 </resources>

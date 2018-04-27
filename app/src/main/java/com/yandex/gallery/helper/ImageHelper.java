@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
@@ -69,6 +70,14 @@ public final class ImageHelper {
         byte[] data = image.toByteArray();
         return BitmapFactory.decodeByteArray(data, 0, data.length, sOptions);
     }
+
+    public static Bitmap rotateImage(Bitmap image, int degrees) {
+        Matrix matrix = new Matrix();
+        matrix.preRotate(degrees);
+
+        return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
+    }
+
 
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
