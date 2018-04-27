@@ -112,8 +112,11 @@ public class ListImagesFragment extends Fragment {
 
                 break;
             }
-            //TODO:dialog
-            case ERROR:
+            case ERROR:{
+                DownloadImagesDialog.
+                        newInstance(response.getMessage()).
+                        show(getFragmentManager(), YANDEX_SERVER_ERROR_DIALOG);
+            }
         }
     }
 

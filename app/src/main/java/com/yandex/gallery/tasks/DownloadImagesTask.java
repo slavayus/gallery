@@ -55,13 +55,11 @@ public class DownloadImagesTask extends AsyncTask<String, Void, BackgroundRespon
         } catch (IOException e) {
             e.printStackTrace();
             return new BackgroundResponse<OutputStream>(BackgroundStatus.ERROR)
-                    .addMessage(listImagesFragment.getString(R.string.there_was_a_problem_with_the_network) +
-                            " (" + e.getMessage() + ")");
+                    .addMessage(listImagesFragment.getString(R.string.network_error_text));
         } catch (ServerException e) {
             e.printStackTrace();
             return new BackgroundResponse<OutputStream>(BackgroundStatus.ERROR)
-                    .addMessage(listImagesFragment.getString(R.string.there_was_a_problem_with_the_yandex_server) +
-                            " (" + e.getMessage() + ")");
+                    .addMessage(listImagesFragment.getString(R.string.yandex_server_error_text));
         } finally {
             Log.d(LOG_TAG, "end doInBackground, elapsed time = " + (System.currentTimeMillis() - start));
         }
