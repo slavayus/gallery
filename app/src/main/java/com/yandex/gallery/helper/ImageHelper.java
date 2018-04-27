@@ -93,7 +93,7 @@ public final class ImageHelper {
 
     public static Bitmap createEmptyImage(Point mDisplay, ListImagesFragment listImagesFragment) {
         Bitmap bitmap = Bitmap.createBitmap(mDisplay.x / 2 - 3, mDisplay.x / 2, Bitmap.Config.RGB_565);
-        bitmap.eraseColor(listImagesFragment.getResources().getColor(R.color.backgroundColorEmptyImage));
+        bitmap.eraseColor(listImagesFragment.getResources().getColor(R.color.emptyImageColor));
 
         return getRoundedCornerBitmap(bitmap);
     }
