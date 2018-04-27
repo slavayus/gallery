@@ -100,12 +100,9 @@ public class ListImagesFragment extends Fragment {
                 Bitmap bitmap = ImageHelper.decodeImageRegion(responseData, mDisplay);
 
                 mImageAdapter.addImage(bitmap);
+                mImageAdapter.updateItem();
 
                 OneImagePagerActivity.notifyAdapter();
-
-                if (mCurrentImageIndex % 2 == 0) {
-                    mImageAdapter.updateItem();
-                }
 
                 if (mCurrentImageIndex < 36) {
                     //                    new FlatResourceListTask(this, ++mCurrentImageIndex).execute(mToken);
@@ -125,7 +122,7 @@ public class ListImagesFragment extends Fragment {
     private void updateUI() {
         List<Bitmap> bitmaps = new ArrayList<>();
         bitmaps.add(mEmptyBitmap);
-        bitmaps.add(mEmptyBitmap);
+        bitmaps.add(null);
 
         mImageAdapter = new ImageAdapter(bitmaps);
         mImagesRecyclerView.setAdapter(mImageAdapter);
@@ -198,7 +195,8 @@ public class ListImagesFragment extends Fragment {
         }
 
         void updateItem() {
-            this.notifyItemInserted((mCurrentImageIndex / 2) - 1);
+            this.notifyItemChanged(mCurrentImageIndex / 2);
+            this.notifyItemChanged(((mCurrentImageIndex - 1) / 2));
             Log.d(LOG_TAG, "data set notified");
         }
 
