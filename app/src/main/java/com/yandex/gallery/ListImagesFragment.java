@@ -107,12 +107,14 @@ public class ListImagesFragment extends Fragment {
                     mImageAdapter.updateItem();
                 }
 
-//                    new FlatResourceListTask(this, ++mCurrentImageIndex).execute(mToken);
-                new LastUploadedTask(this, mCurrentImageIndex++).execute(mToken);
+                if (mCurrentImageIndex < 36) {
+                    //                    new FlatResourceListTask(this, ++mCurrentImageIndex).execute(mToken);
+                    new LastUploadedTask(this, mCurrentImageIndex++).execute(mToken);
+                }
 
                 break;
             }
-            case ERROR:{
+            case ERROR: {
                 DownloadImagesDialog.
                         newInstance(response.getMessage()).
                         show(getFragmentManager(), YANDEX_SERVER_ERROR_DIALOG);
