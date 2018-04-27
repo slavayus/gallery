@@ -6,6 +6,8 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -102,6 +104,8 @@ public class ListImagesFragment extends Fragment {
                 mImageAdapter.addImage(bitmap);
                 mImageAdapter.updateItem();
 
+                updateSubtitle();
+
                 OneImagePagerActivity.notifyAdapter();
 
                 if (mCurrentImageIndex < 36) {
@@ -116,6 +120,14 @@ public class ListImagesFragment extends Fragment {
                         newInstance(response.getMessage()).
                         show(getFragmentManager(), YANDEX_SERVER_ERROR_DIALOG);
             }
+        }
+    }
+
+    private void updateSubtitle() {
+        String subtitle = getString(R.string.subtitle_format, mCurrentImageIndex);
+        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setSubtitle(subtitle);
         }
     }
 
