@@ -18,4 +18,5 @@
     <string name="subtitle_format">%1$d фото</string>
     <string name="yandex_server_error_title">Ошибка</string>
     <string name="yandex_server_error_text">Возникли проблемы при работе с сервером Yandex</string>
+    <string name="network_error_text">Возники проблемы с сетью. Провертье подключение к сети.</string>
 </resources>

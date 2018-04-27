@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.yandex.disk.rest.json.Resource;
+import com.yandex.gallery.dialog.DownloadImagesDialog;
 import com.yandex.gallery.helper.ImageHelper;
 import com.yandex.gallery.helper.Images;
 import com.yandex.gallery.tasks.BackgroundResponse;
@@ -33,6 +34,7 @@ import java.util.List;
 public class ListImagesFragment extends Fragment {
     private static final String LOG_TAG = "ListImagesFragment";
     private static final String TOKEN = "TOKEN";
+    private static final String YANDEX_SERVER_ERROR_DIALOG = "YANDEX_SERVER_ERROR_DIALOG";
 
     private String mToken;
     private RecyclerView mImagesRecyclerView;
@@ -79,8 +81,11 @@ public class ListImagesFragment extends Fragment {
 //                new DownloadPreviewImagesTask((List<Resource>) response.getData(), this).execute();
                 break;
             }
-            //TODO:dialog
-            case ERROR:
+            case ERROR: {
+                DownloadImagesDialog.
+                        newInstance(response.getMessage()).
+                        show(getFragmentManager(), YANDEX_SERVER_ERROR_DIALOG);
+            }
         }
     }
 
@@ -191,6 +196,7 @@ public class ListImagesFragment extends Fragment {
             this.notifyItemInserted((mCurrentImageIndex / 2) - 1);
             Log.d(LOG_TAG, "data set notified");
         }
+
     }
 
     public static ListImagesFragment newInstance(String mToken) {

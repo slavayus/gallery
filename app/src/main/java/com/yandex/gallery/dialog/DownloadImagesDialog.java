@@ -14,15 +14,18 @@ import com.yandex.gallery.R;
  * Created by slavik on 4/27/18.
  */
 
-public class YandexServerErrorDialog extends DialogFragment {
-    private static final String LOG_TAG = "YandexServerErrorDialog";
+public class DownloadImagesDialog extends DialogFragment {
+    private static final String LOG_TAG = "DownloadImagesDialog";
+    private static final String MESSAGE = "MESSAGE";
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        String message = getArguments().getString(MESSAGE);
+
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.yandex_server_error_title)
-                .setMessage(R.string.yandex_server_error_text)
+                .setMessage(message)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -43,5 +46,13 @@ public class YandexServerErrorDialog extends DialogFragment {
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.setCancelable(false);
         return alertDialog;
+    }
+
+    public static DownloadImagesDialog newInstance(String body) {
+        DownloadImagesDialog downloadImagesDialog = new DownloadImagesDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString(MESSAGE, body);
+        downloadImagesDialog.setArguments(bundle);
+        return downloadImagesDialog;
     }
 }

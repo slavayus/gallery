@@ -11,7 +11,6 @@ import com.yandex.disk.rest.json.Resource;
 import com.yandex.disk.rest.json.ResourceList;
 import com.yandex.gallery.ListImagesFragment;
 import com.yandex.gallery.R;
-import com.yandex.gallery.dialog.YandexServerErrorDialog;
 
 import java.io.IOException;
 
@@ -24,7 +23,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class LastUploadedTask extends AsyncTask<String, Void, BackgroundResponse> {
     private final ListImagesFragment listImagesFragment;
     private final int mCurrentImageIndex;
-    private static final String YANDEX_SERVER_ERROR_DIALOG = "YANDEX_SERVER_ERROR_DIALOG";
 
     public LastUploadedTask(ListImagesFragment listImagesFragment, int mCurrentImageIndex) {
         this.listImagesFragment = listImagesFragment;
@@ -43,16 +41,13 @@ public class LastUploadedTask extends AsyncTask<String, Void, BackgroundResponse
         } catch (IOException e) {
             e.printStackTrace();
             return new BackgroundResponse(BackgroundStatus.ERROR)
-                    .addMessage(listImagesFragment.getString(R.string.there_was_a_problem_with_the_network) +
-                            " (" + e.getMessage() + ")");
+                    .addMessage(listImagesFragment.getString(R.string.network_error_text));
 
         } catch (ServerIOException e) {
             e.printStackTrace();
             clearPreferences();
-            new YandexServerErrorDialog().show(listImagesFragment.getFragmentManager(), YANDEX_SERVER_ERROR_DIALOG);
             return new BackgroundResponse(BackgroundStatus.ERROR)
-                    .addMessage(listImagesFragment.getString(R.string.there_was_a_problem_with_the_yandex_server) +
-                            " (" + e.getMessage() + ")");
+                    .addMessage(listImagesFragment.getString(R.string.yandex_server_error_text));
         }
     }
 
