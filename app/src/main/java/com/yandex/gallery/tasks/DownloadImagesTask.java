@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Created by slavik on 4/16/18.
+ * Download image from yandex disk by URI
+ *
+ * @see BackgroundResponse
  */
 
 public class DownloadImagesTask extends AsyncTask<String, Void, BackgroundResponse> {
@@ -27,11 +29,24 @@ public class DownloadImagesTask extends AsyncTask<String, Void, BackgroundRespon
 
     private OutputStream outputStream;
 
-    public DownloadImagesTask(Resource resources, ListImagesFragment listImagesFragment) {
-        this.listImagesFragment = listImagesFragment;
+    /**
+     * Creates a new AsyncTask to download image by resources
+     *
+     * @param resources resources with URI to downloading image
+     * @param fragment  instance of Fragment
+     * @see Resource
+     */
+    public DownloadImagesTask(Resource resources, ListImagesFragment fragment) {
+        this.listImagesFragment = fragment;
         this.resource = resources;
     }
 
+    /**
+     * Download image
+     *
+     * @param data 0Auth token for authorization
+     * @return download status
+     */
     @Override
     protected BackgroundResponse doInBackground(String... data) {
         Log.d(LOG_TAG, "start doInBackground");
@@ -40,7 +55,6 @@ public class DownloadImagesTask extends AsyncTask<String, Void, BackgroundRespon
             Credentials credentials = new Credentials("", data[0]);
 
             RestClient restClient = new RestClient(credentials);
-            int i = 0;
             Log.d(LOG_TAG, "downloading image");
             restClient.downloadFile(resource.getPath().getPath(), new DownloadListener() {
                 @Override

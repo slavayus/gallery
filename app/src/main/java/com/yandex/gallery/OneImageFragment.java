@@ -16,7 +16,7 @@ import com.yandex.gallery.helper.ImageHelper;
 import com.yandex.gallery.helper.Images;
 
 /**
- * Created by slavik on 4/16/18.
+ * Fragment for displaying image on full display
  */
 
 public class OneImageFragment extends Fragment {
@@ -40,19 +40,7 @@ public class OneImageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_one_image, container, false);
 
-        view.findViewById(R.id.rotate_right_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mImageView.setImageBitmap(ImageHelper.rotateImage(mImage, currentDegrees += 90));
-            }
-        });
-
-        view.findViewById(R.id.rotate_left_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mImageView.setImageBitmap(ImageHelper.rotateImage(mImage, currentDegrees -= 90));
-            }
-        });
+        setUpRotateButtonListeners(view);
 
         //TODO: animate rotate buttons
         view.setOnClickListener(new View.OnClickListener() {
@@ -76,12 +64,23 @@ public class OneImageFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Activity lifecycle method.
+     * Setup the image into view
+     *
+     * @param savedInstanceState saved activity state
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mImageView.setImageBitmap(mImage);
     }
 
+
+    /**
+     * Activity lifecycle method
+     * Clear unnecessary image
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -91,6 +90,12 @@ public class OneImageFragment extends Fragment {
         Log.d(LOG_TAG, "destroyed");
     }
 
+    /**
+     * Creates a new OneImageFragment with the given image index for displaying.
+     *
+     * @param index the image index in store {@link Images}
+     * @return a new instance of OneImageFragment
+     */
     public static OneImageFragment newInstance(final int index) {
         Bundle args = new Bundle();
         args.putInt(IMAGE_INDEX, index);
@@ -98,5 +103,27 @@ public class OneImageFragment extends Fragment {
         OneImageFragment oneImageFragment = new OneImageFragment();
         oneImageFragment.setArguments(args);
         return oneImageFragment;
+    }
+
+
+    /**
+     * Setup rotate button listeners
+     *
+     * @param rootView view where are located rotation buttons
+     */
+    public void setUpRotateButtonListeners(View rootView) {
+        rootView.findViewById(R.id.rotate_right_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mImageView.setImageBitmap(ImageHelper.rotateImage(mImage, currentDegrees += 90));
+            }
+        });
+
+        rootView.findViewById(R.id.rotate_left_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mImageView.setImageBitmap(ImageHelper.rotateImage(mImage, currentDegrees -= 90));
+            }
+        });
     }
 }

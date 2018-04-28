@@ -1,7 +1,9 @@
 package com.yandex.gallery.tasks;
 
 /**
- * Created by slavik on 4/16/18.
+ * Completion status of AsyncTasks
+ *
+ * @see android.os.AsyncTask
  */
 
 public enum BackgroundStatus {

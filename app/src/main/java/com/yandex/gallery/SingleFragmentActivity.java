@@ -6,10 +6,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 /**
- * Created by slavik on 4/15/18.
+ * Abstract activity to starting transactions for fragments
  */
 
-public abstract class SingleFragmentActivity extends AppCompatActivity{
+public abstract class SingleFragmentActivity extends AppCompatActivity {
     protected abstract Fragment createFragment();
 
     @Override

@@ -1,7 +1,7 @@
 package com.yandex.gallery.helper;
 
 /**
- * Created by slavik on 4/15/18.
+ * Class for generating uri for 0Auth
  */
 
 public final class OAuthHelper {
@@ -12,6 +12,9 @@ public final class OAuthHelper {
     private OAuthHelper() {
     }
 
+    /**
+     * @return generated URI for 0Auth
+     */
     public static String getUri() {
         return OAUTH_URL + "?" +
                 "response_type=" + RESPONSE_TYPE +

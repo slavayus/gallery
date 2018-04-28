@@ -9,12 +9,22 @@ import android.util.Log;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This activity start when user apply agreement of yandex.disk
+ */
 
 public class GalleryActivity extends SingleFragmentActivity {
     private static final String LOG_TAG = "GalleryActivity";
     public static final String SAVED_TOKEN = "SAVED_TOKEN";
-    private String mToken;
 
+    /**
+     * Create fragment for displaying images if user applied agreements of yandex.disk
+     * otherwise start again registration dialog
+     *
+     * @return new fragment
+     * @see ListImagesFragment
+     * @see GalleryFragment
+     */
     @Override
     protected Fragment createFragment() {
         Uri data = getIntent().getData();
@@ -24,9 +34,9 @@ public class GalleryActivity extends SingleFragmentActivity {
             Matcher matcher = pattern.matcher(data.toString());
             if (matcher.find()) {
 
-                mToken = matcher.group(1);
+                String mToken = matcher.group(1);
 
-                saveToken();
+                saveToken(mToken);
 
                 return ListImagesFragment.newInstance(mToken);
             }
@@ -37,10 +47,15 @@ public class GalleryActivity extends SingleFragmentActivity {
         return new GalleryFragment();
     }
 
-    private void saveToken() {
+    /**
+     * Save received token
+     *
+     * @param token yandex 0Auth token
+     */
+    private void saveToken(String token) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor edit = preferences.edit();
-        edit.putString(SAVED_TOKEN, mToken);
+        edit.putString(SAVED_TOKEN, token);
         edit.apply();
         Log.d(LOG_TAG, " token saved");
     }

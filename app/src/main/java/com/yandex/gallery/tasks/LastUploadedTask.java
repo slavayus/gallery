@@ -17,18 +17,33 @@ import java.io.IOException;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * Created by slavik on 4/16/18.
+ * Download image from yandex disk by URI
+ *
+ * @see BackgroundResponse
  */
 
 public class LastUploadedTask extends AsyncTask<String, Void, BackgroundResponse> {
     private final ListImagesFragment listImagesFragment;
     private final int mCurrentImageIndex;
 
-    public LastUploadedTask(ListImagesFragment listImagesFragment, int mCurrentImageIndex) {
-        this.listImagesFragment = listImagesFragment;
-        this.mCurrentImageIndex = mCurrentImageIndex;
+    /**
+     * Creates a new AsyncTask to get resource of image
+     *
+     * @param currentImageIndex image index which need to download
+     * @param fragment          instance of Fragment
+     * @see Resource
+     */
+    public LastUploadedTask(ListImagesFragment fragment, int currentImageIndex) {
+        this.listImagesFragment = fragment;
+        this.mCurrentImageIndex = currentImageIndex;
     }
 
+    /**
+     * Get image resource
+     *
+     * @param data 0Auth token for authorization
+     * @return task status
+     */
     @Override
     protected BackgroundResponse doInBackground(String... data) {
         try {

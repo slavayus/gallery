@@ -15,7 +15,7 @@ import com.yandex.gallery.R;
 import com.yandex.gallery.helper.OAuthHelper;
 
 /**
- * Created by slavik on 4/21/18.
+ * Dialog for registration with yandex OAuth.
  */
 
 public class RegisterFragment extends DialogFragment {

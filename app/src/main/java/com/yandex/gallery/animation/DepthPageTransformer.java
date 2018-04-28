@@ -4,7 +4,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 /**
- * Created by slavik on 4/22/18.
+ * Animation for PageTransformer in ViewPager
+ *
+ * @see android.support.v4.view.ViewPager.PageTransformer
+ * @see android.support.v4.view.ViewPager
  */
 
 public class DepthPageTransformer implements ViewPager.PageTransformer {

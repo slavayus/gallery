@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by slavik on 4/16/18.
+ * Class for displaying all the images
  */
 
 public class ListImagesFragment extends Fragment {
@@ -52,10 +52,17 @@ public class ListImagesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.mToken = getArguments().getString(TOKEN);
         this.mDisplay = calculateDisplaySize(this);
-        this.mEmptyBitmap = ImageHelper.createEmptyImage(mDisplay, this);
+        this.mEmptyBitmap = ImageHelper.createEmptyImage(mDisplay, getResources().getColor(R.color.emptyImageColor));
         this.mCurrentImageIndex = 0;
     }
 
+
+    /**
+     * Calculate the display size of the device
+     *
+     * @param fragment current fragment
+     * @return {@link Point} with the display size of the user device
+     */
     public Point calculateDisplaySize(Fragment fragment) {
         Display display = fragment.getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -77,6 +84,12 @@ public class ListImagesFragment extends Fragment {
         return view;
     }
 
+
+    /**
+     * Handler response from AsyncTask
+     *
+     * @param response from {@link LastUploadedTask}
+     */
     public void onGetLastUploadedImages(BackgroundResponse response) {
         switch (response.getStatus()) {
             case OK: {
@@ -92,12 +105,19 @@ public class ListImagesFragment extends Fragment {
         }
     }
 
+    /**
+     * Clear all saved preferences
+     */
     private void clearPreferences() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         preferences.edit().clear().apply();
     }
 
-
+    /**
+     * Handler response from AsyncTask
+     *
+     * @param response from {@link DownloadImagesTask}
+     */
     public void onDownloadImages(BackgroundResponse response) {
         switch (response.getStatus()) {
             case OK: {
@@ -129,6 +149,9 @@ public class ListImagesFragment extends Fragment {
         }
     }
 
+    /**
+     * Update activity subtitle in action bar
+     */
     private void updateSubtitle() {
         if (getActivity() != null) {
             String subtitle = getString(R.string.subtitle_format, mCurrentImageIndex);
@@ -139,6 +162,9 @@ public class ListImagesFragment extends Fragment {
         }
     }
 
+    /**
+     * Setup starting images
+     */
     private void updateUI() {
         List<Bitmap> bitmaps = new ArrayList<>();
         bitmaps.add(mEmptyBitmap);
@@ -222,9 +248,16 @@ public class ListImagesFragment extends Fragment {
 
     }
 
-    public static ListImagesFragment newInstance(String mToken) {
+    /**
+     * Creates a new ListImagesFragment with the given 0Auth token.
+     *
+     * @param token 0Auth token
+     * @return a new instance of OneImageFragment
+     * @see com.yandex.gallery.helper.OAuthHelper#RESPONSE_TYPE
+     */
+    public static ListImagesFragment newInstance(String token) {
         Bundle args = new Bundle();
-        args.putString(TOKEN, mToken);
+        args.putString(TOKEN, token);
 
         ListImagesFragment listImagesFragment = new ListImagesFragment();
         listImagesFragment.setArguments(args);

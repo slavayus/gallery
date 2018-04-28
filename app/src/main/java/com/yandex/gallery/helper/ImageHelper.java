@@ -13,14 +13,11 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 
-import com.yandex.gallery.ListImagesFragment;
-import com.yandex.gallery.R;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Created by slavik on 4/17/18.
+ * Class helper for working with Bitmap
  */
 
 public final class ImageHelper {
@@ -32,6 +29,11 @@ public final class ImageHelper {
         setUpOptions();
     }
 
+    /**
+     * Set up options with which image will be encoded
+     *
+     * @see ImageHelper#decodeImage(ByteArrayOutputStream)
+     */
     private static void setUpOptions() {
         sOptions = new BitmapFactory.Options();
         sOptions.inSampleSize = 2;
@@ -39,6 +41,15 @@ public final class ImageHelper {
     }
 
 
+    /**
+     * Decode image in the form of a square.
+     * Divides the screen in two and make a square from image with this params.
+     *
+     * @param data    output stream with image
+     * @param display display params
+     * @return Bitmap with decoded image.
+     * @see Point
+     */
     public static Bitmap decodeImageRegion(ByteArrayOutputStream data, Point display) {
         Log.d(LOG_TAG, " start decodeImageRegion");
         Bitmap bitmap = null;
@@ -66,11 +77,26 @@ public final class ImageHelper {
         return bitmap;
     }
 
+
+    /**
+     * Decode full image
+     *
+     * @param image output stream with image
+     * @return Bitmap with decoded image.
+     */
     public static Bitmap decodeImage(ByteArrayOutputStream image) {
         byte[] data = image.toByteArray();
         return BitmapFactory.decodeByteArray(data, 0, data.length, sOptions);
     }
 
+
+    /**
+     * Rotate image according to degrees
+     *
+     * @param image   Bitmap image which will be rotated
+     * @param degrees degrees to rotate the image
+     * @return rotated bitmap
+     */
     public static Bitmap rotateImage(Bitmap image, int degrees) {
         Matrix matrix = new Matrix();
         matrix.preRotate(degrees);
@@ -79,6 +105,12 @@ public final class ImageHelper {
     }
 
 
+    /**
+     * Make image with rounded corners
+     *
+     * @param bitmap an image which corners will be rounded
+     * @return Bitmap which corners was rounded
+     */
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
                 bitmap.getHeight(), Bitmap.Config.ARGB_8888);
@@ -100,9 +132,16 @@ public final class ImageHelper {
     }
 
 
-    public static Bitmap createEmptyImage(Point mDisplay, ListImagesFragment listImagesFragment) {
-        Bitmap bitmap = Bitmap.createBitmap(mDisplay.x / 2 - 3, mDisplay.x / 2, Bitmap.Config.RGB_565);
-        bitmap.eraseColor(listImagesFragment.getResources().getColor(R.color.emptyImageColor));
+    /**
+     * Create an empty bitmap. Can display this image while real image is downloading.
+     *
+     * @param display device display params
+     * @param colorID color to fill the image
+     * @return an empty bitmap with given color
+     */
+    public static Bitmap createEmptyImage(Point display, int colorID) {
+        Bitmap bitmap = Bitmap.createBitmap(display.x / 2 - 3, display.x / 2, Bitmap.Config.RGB_565);
+        bitmap.eraseColor(colorID);
 
         return getRoundedCornerBitmap(bitmap);
     }

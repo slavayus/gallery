@@ -11,7 +11,7 @@ import android.view.KeyEvent;
 import com.yandex.gallery.R;
 
 /**
- * Created by slavik on 4/27/18.
+ * Dialog for errors which throws while work with yandex server.
  */
 
 public class DownloadImagesDialog extends DialogFragment {
@@ -48,6 +48,13 @@ public class DownloadImagesDialog extends DialogFragment {
         return alertDialog;
     }
 
+
+    /**
+     * Creates a new DownloadImagesDialog with the given body for displaying.
+     *
+     * @param body the string message which will be displayed in dialog
+     * @return a new instance of DownloadImagesDialog
+     */
     public static DownloadImagesDialog newInstance(String body) {
         DownloadImagesDialog downloadImagesDialog = new DownloadImagesDialog();
         Bundle bundle = new Bundle();

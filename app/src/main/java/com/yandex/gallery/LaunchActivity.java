@@ -8,7 +8,7 @@ import android.util.Log;
 import static com.yandex.gallery.GalleryActivity.SAVED_TOKEN;
 
 /**
- * Created by slavik on 4/28/18.
+ * App start activity
  */
 
 public class LaunchActivity extends SingleFragmentActivity {
@@ -25,6 +25,12 @@ public class LaunchActivity extends SingleFragmentActivity {
         return new GalleryFragment();
     }
 
+
+    /**
+     * Load saved 0Auth token
+     *
+     * @return 0Auth token
+     */
     public String getToken() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String token = preferences.getString(SAVED_TOKEN, null);

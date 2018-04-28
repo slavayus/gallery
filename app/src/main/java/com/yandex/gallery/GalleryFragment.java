@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import com.yandex.gallery.dialog.RegisterFragment;
 
 /**
- * Created by slavik on 4/15/18.
+ * Start a dialog for registration
+ *
+ * @see RegisterFragment
  */
 
 public class GalleryFragment extends Fragment {

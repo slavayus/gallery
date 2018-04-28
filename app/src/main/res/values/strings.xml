@@ -6,8 +6,6 @@
     <string name="open_in_browser">Open in browser</string>
     <string name="there_is_no_token">there is no token</string>
     <string name="there_is_no_info">there is no info</string>
-    <string name="there_was_a_problem_with_the_network">There was a problem with the network</string>
-    <string name="there_was_a_problem_with_the_yandex_server">There was a problem with the yandex server</string>
     <string name="there_is_no_last_uploaded_files">there is no last uploaded files</string>
     <string name="last_uploaded_image">last uploaded image</string>
     <string name="left_image_description">There is a left image</string>

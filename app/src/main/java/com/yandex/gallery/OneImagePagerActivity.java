@@ -12,12 +12,13 @@ import android.util.Log;
 
 import com.yandex.gallery.animation.DepthPageTransformer;
 import com.yandex.gallery.helper.Images;
+import com.yandex.gallery.tasks.BackgroundResponse;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
- * Created by slavik on 4/21/18.
+ * Activity for hosting images in full display
  */
 
 public class OneImagePagerActivity extends AppCompatActivity {
@@ -26,14 +27,13 @@ public class OneImagePagerActivity extends AppCompatActivity {
 
     private static ViewPager mViewPager;
     private List<ByteArrayOutputStream> mImages;
-    private int mIndex;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_one_image_pager);
 
-        mIndex = getIntent().getIntExtra(EXTRA_IMAGE, 0);
+        int mIndex = getIntent().getIntExtra(EXTRA_IMAGE, 0);
         mViewPager = findViewById(R.id.one_image_view_pager);
         mImages = Images.getAll();
 
@@ -54,12 +54,24 @@ public class OneImagePagerActivity extends AppCompatActivity {
         mViewPager.setOffscreenPageLimit(0);
     }
 
+    /**
+     * Creates a new Intent with the given context and position in RecyclerView.
+     *
+     * @param context  current context
+     * @param position position in RecyclerView {@link ListImagesFragment}
+     * @return a new {@link Intent}
+     */
     public static Intent newIntent(Context context, int position) {
         Intent intent = new Intent(context, OneImagePagerActivity.class);
         intent.putExtra(EXTRA_IMAGE, position);
         return intent;
     }
 
+    /**
+     * Notify adapter when get a new image from AsyncTask
+     *
+     * @see ListImagesFragment#onDownloadImages(BackgroundResponse)
+     */
     //TODO: stop this shit. I need some help.
     public static void notifyAdapter() {
         if (mViewPager != null) {
@@ -67,6 +79,9 @@ public class OneImagePagerActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Activity lifecycle method
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
