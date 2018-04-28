@@ -2,6 +2,7 @@ package com.yandex.gallery.tasks;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 
 import com.yandex.disk.rest.Credentials;
 import com.yandex.disk.rest.ResourcesArgs;
@@ -9,8 +10,8 @@ import com.yandex.disk.rest.RestClient;
 import com.yandex.disk.rest.exceptions.ServerIOException;
 import com.yandex.disk.rest.json.Resource;
 import com.yandex.disk.rest.json.ResourceList;
-import com.yandex.gallery.ListImagesFragment;
 import com.yandex.gallery.R;
+import com.yandex.gallery.listeners.LastUploadedImagesListener;
 
 import java.io.IOException;
 
@@ -23,7 +24,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class LastUploadedTask extends AsyncTask<String, Void, BackgroundResponse> {
-    private final ListImagesFragment listImagesFragment;
+    private final Fragment fragment;
     private final int mCurrentImageIndex;
 
     /**
@@ -33,8 +34,8 @@ public class LastUploadedTask extends AsyncTask<String, Void, BackgroundResponse
      * @param fragment          instance of Fragment
      * @see Resource
      */
-    public LastUploadedTask(ListImagesFragment fragment, int currentImageIndex) {
-        this.listImagesFragment = fragment;
+    public LastUploadedTask(Fragment fragment, int currentImageIndex) {
+        this.fragment = fragment;
         this.mCurrentImageIndex = currentImageIndex;
     }
 
@@ -56,23 +57,23 @@ public class LastUploadedTask extends AsyncTask<String, Void, BackgroundResponse
         } catch (IOException e) {
             e.printStackTrace();
             return new BackgroundResponse(BackgroundStatus.ERROR)
-                    .addMessage(listImagesFragment.getString(R.string.network_error_text));
+                    .addMessage(fragment.getString(R.string.network_error_text));
 
         } catch (ServerIOException e) {
             e.printStackTrace();
             clearPreferences();
             return new BackgroundResponse(BackgroundStatus.ERROR)
-                    .addMessage(listImagesFragment.getString(R.string.yandex_server_error_text));
+                    .addMessage(fragment.getString(R.string.yandex_server_error_text));
         }
     }
 
     private void clearPreferences() {
-        SharedPreferences preferences = listImagesFragment.getActivity().getPreferences(MODE_PRIVATE);
+        SharedPreferences preferences = fragment.getActivity().getPreferences(MODE_PRIVATE);
         preferences.edit().clear().apply();
     }
 
     @Override
     protected void onPostExecute(BackgroundResponse response) {
-        listImagesFragment.onGetLastUploadedImages(response);
+        ((LastUploadedImagesListener) fragment).onGetLastUploadedImages(response);
     }
 }

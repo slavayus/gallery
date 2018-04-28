@@ -23,6 +23,8 @@ import com.yandex.disk.rest.json.Resource;
 import com.yandex.gallery.dialog.DownloadImagesDialog;
 import com.yandex.gallery.helper.ImageHelper;
 import com.yandex.gallery.helper.Images;
+import com.yandex.gallery.listeners.DownloadImageListener;
+import com.yandex.gallery.listeners.LastUploadedImagesListener;
 import com.yandex.gallery.tasks.BackgroundResponse;
 import com.yandex.gallery.tasks.DownloadImagesTask;
 import com.yandex.gallery.tasks.LastUploadedTask;
@@ -35,7 +37,7 @@ import java.util.List;
  * Class for displaying all the images
  */
 
-public class ListImagesFragment extends Fragment {
+public class ListImagesFragment extends Fragment implements DownloadImageListener, LastUploadedImagesListener {
     private static final String LOG_TAG = "ListImagesFragment";
     private static final String TOKEN = "TOKEN";
     private static final String YANDEX_SERVER_ERROR_DIALOG = "YANDEX_SERVER_ERROR_DIALOG";
@@ -90,6 +92,7 @@ public class ListImagesFragment extends Fragment {
      *
      * @param response from {@link LastUploadedTask}
      */
+    @Override
     public void onGetLastUploadedImages(BackgroundResponse response) {
         switch (response.getStatus()) {
             case OK: {
@@ -118,6 +121,7 @@ public class ListImagesFragment extends Fragment {
      *
      * @param response from {@link DownloadImagesTask}
      */
+    @Override
     public void onDownloadImages(BackgroundResponse response) {
         switch (response.getStatus()) {
             case OK: {
