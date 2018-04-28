@@ -70,7 +70,6 @@ public class ListImagesFragment extends Fragment {
         mImagesRecyclerView = view.findViewById(R.id.images_recycler_view);
         mImagesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-//        new FlatResourceListTask(this, mCurrentImageIndex).execute(mToken);
         new LastUploadedTask(this, mCurrentImageIndex++).execute(mToken);
 
         updateUI();
@@ -82,7 +81,6 @@ public class ListImagesFragment extends Fragment {
         switch (response.getStatus()) {
             case OK: {
                 new DownloadImagesTask((Resource) response.getData(), this).execute(mToken);
-//                new DownloadPreviewImagesTask((List<Resource>) response.getData(), this).execute();
                 break;
             }
             case ERROR: {
