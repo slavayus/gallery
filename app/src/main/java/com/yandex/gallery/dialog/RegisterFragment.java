@@ -32,7 +32,10 @@ public class RegisterFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Log.d(LOG_TAG, " on click");
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(OAuthHelper.getUri())));
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(OAuthHelper.getUri()));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        getActivity().finish();
                     }
                 })
                 .setOnKeyListener(new DialogInterface.OnKeyListener() {

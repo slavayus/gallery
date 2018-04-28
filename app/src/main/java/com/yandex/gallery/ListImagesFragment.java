@@ -124,10 +124,12 @@ public class ListImagesFragment extends Fragment {
     }
 
     private void updateSubtitle() {
-        String subtitle = getString(R.string.subtitle_format, mCurrentImageIndex);
-        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setSubtitle(subtitle);
+        if (getActivity() != null) {
+            String subtitle = getString(R.string.subtitle_format, mCurrentImageIndex);
+            ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (supportActionBar != null) {
+                supportActionBar.setSubtitle(subtitle);
+            }
         }
     }
 
