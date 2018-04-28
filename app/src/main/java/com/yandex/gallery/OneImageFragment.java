@@ -54,6 +54,7 @@ public class OneImageFragment extends Fragment {
             }
         });
 
+        //TODO: animate rotate buttons
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
