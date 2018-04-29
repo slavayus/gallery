@@ -27,7 +27,7 @@ public class BackgroundResponse<T> {
      * @param message response message
      * @return current BackgroundResponse
      */
-    BackgroundResponse addMessage(String message) {
+    BackgroundResponse setMessage(String message) {
         this.message = message;
         return this;
     }
@@ -38,7 +38,7 @@ public class BackgroundResponse<T> {
      * @param data response data
      * @return current BackgroundResponse
      */
-    BackgroundResponse addData(T data) {
+    BackgroundResponse setData(T data) {
         this.data = data;
         return this;
     }

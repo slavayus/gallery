@@ -66,15 +66,15 @@ public class DownloadImagesTask extends AsyncTask<String, Void, BackgroundRespon
                 }
             });
 
-            return new BackgroundResponse<OutputStream>(BackgroundStatus.OK).addData(outputStream);
+            return new BackgroundResponse<OutputStream>(BackgroundStatus.OK).setData(outputStream);
         } catch (IOException e) {
             e.printStackTrace();
             return new BackgroundResponse<OutputStream>(BackgroundStatus.ERROR)
-                    .addMessage(fragment.getString(R.string.network_error_text));
+                    .setMessage(fragment.getString(R.string.network_error_text));
         } catch (ServerException e) {
             e.printStackTrace();
             return new BackgroundResponse<OutputStream>(BackgroundStatus.ERROR)
-                    .addMessage(fragment.getString(R.string.yandex_server_error_text));
+                    .setMessage(fragment.getString(R.string.yandex_server_error_text));
         } finally {
             Log.d(LOG_TAG, "end doInBackground, elapsed time = " + (System.currentTimeMillis() - start));
         }

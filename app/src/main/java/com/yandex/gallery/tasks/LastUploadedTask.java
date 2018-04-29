@@ -53,17 +53,17 @@ public class LastUploadedTask extends AsyncTask<String, Void, BackgroundResponse
             RestClient restClient = new RestClient(credentials);
             ResourceList resourceList = restClient.getLastUploadedResources(new ResourcesArgs.Builder().setMediaType("image").setLimit(mCurrentImageIndex + 1).build());
 
-            return new BackgroundResponse<Resource>(BackgroundStatus.OK).addData(resourceList.getItems().get(mCurrentImageIndex));
+            return new BackgroundResponse<Resource>(BackgroundStatus.OK).setData(resourceList.getItems().get(mCurrentImageIndex));
         } catch (IOException e) {
             e.printStackTrace();
             return new BackgroundResponse(BackgroundStatus.ERROR)
-                    .addMessage(fragment.getString(R.string.network_error_text));
+                    .setMessage(fragment.getString(R.string.network_error_text));
 
         } catch (ServerIOException e) {
             e.printStackTrace();
             clearPreferences();
             return new BackgroundResponse(BackgroundStatus.ERROR)
-                    .addMessage(fragment.getString(R.string.yandex_server_error_text));
+                    .setMessage(fragment.getString(R.string.yandex_server_error_text));
         }
     }
 
