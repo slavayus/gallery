@@ -14,7 +14,7 @@ import com.yandex.gallery.animation.DepthPageTransformer;
 import com.yandex.gallery.helper.Images;
 import com.yandex.gallery.tasks.BackgroundResponse;
 
-import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -26,7 +26,7 @@ public class OneImagePagerActivity extends AppCompatActivity {
     private static final String LOG_TAG = "OneImagePagerActivity";
 
     private static ViewPager mViewPager;
-    private List<ByteArrayOutputStream> mImages;
+    private List<OutputStream> mImages;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

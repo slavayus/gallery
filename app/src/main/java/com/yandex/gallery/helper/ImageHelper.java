@@ -15,6 +15,7 @@ import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Class helper for working with Bitmap
@@ -32,7 +33,7 @@ public final class ImageHelper {
     /**
      * Set up options with which image will be encoded
      *
-     * @see ImageHelper#decodeImage(ByteArrayOutputStream)
+     * @see ImageHelper#decodeImage(OutputStream)
      */
     private static void setUpOptions() {
         sOptions = new BitmapFactory.Options();
@@ -84,8 +85,9 @@ public final class ImageHelper {
      * @param image output stream with image
      * @return Bitmap with decoded image.
      */
-    public static Bitmap decodeImage(ByteArrayOutputStream image) {
-        byte[] data = image.toByteArray();
+    public static Bitmap decodeImage(OutputStream image) {
+        //TODO:  check instance of image
+        byte[] data = ((ByteArrayOutputStream) image).toByteArray();
         return BitmapFactory.decodeByteArray(data, 0, data.length, sOptions);
     }
 

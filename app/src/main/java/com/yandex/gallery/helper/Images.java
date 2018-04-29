@@ -1,6 +1,6 @@
 package com.yandex.gallery.helper;
 
-import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +10,8 @@ import java.util.List;
  */
 
 public final class Images {
-    private static Images images;
-    private final List<ByteArrayOutputStream> mImages = new ArrayList<>();
+    private static Images sInstance;
+    private final List<OutputStream> mImages = new ArrayList<>();
 
     private Images() {
     }
@@ -22,10 +22,10 @@ public final class Images {
      * @return the instance on this class
      */
     public static Images instance() {
-        if (images == null) {
-            images = new Images();
+        if (sInstance == null) {
+            sInstance = new Images();
         }
-        return images;
+        return sInstance;
     }
 
     /**
@@ -33,7 +33,7 @@ public final class Images {
      *
      * @param image downloaded image
      */
-    public void addImage(ByteArrayOutputStream image) {
+    public void addImage(OutputStream image) {
         mImages.add(image);
     }
 
@@ -43,7 +43,7 @@ public final class Images {
      * @param index index of an image in store
      * @return image
      */
-    public ByteArrayOutputStream getImage(int index) {
+    public OutputStream getImage(int index) {
         return mImages.get(index);
     }
 
@@ -52,7 +52,7 @@ public final class Images {
      *
      * @return store of downloaded images
      */
-    public List<ByteArrayOutputStream> getAll() {
+    public List<OutputStream> getAll() {
         return mImages;
     }
 }
