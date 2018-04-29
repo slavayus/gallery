@@ -5,18 +5,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Store of downloaded images
+ * Store of downloaded images.
+ * Singleton class for storing.
  */
 
-public class Images {
-    private static final List<ByteArrayOutputStream> mImages = new ArrayList<>();
+public final class Images {
+    private static Images images;
+    private final List<ByteArrayOutputStream> mImages = new ArrayList<>();
+
+    private Images() {
+    }
+
+    /**
+     * Single instance
+     *
+     * @return the instance on this class
+     */
+    public static Images instance() {
+        if (images == null) {
+            images = new Images();
+        }
+        return images;
+    }
 
     /**
      * Add new image to store
      *
      * @param image downloaded image
      */
-    public static void addImage(ByteArrayOutputStream image) {
+    public void addImage(ByteArrayOutputStream image) {
         mImages.add(image);
     }
 
@@ -26,7 +43,7 @@ public class Images {
      * @param index index of an image in store
      * @return image
      */
-    public static ByteArrayOutputStream getImage(int index) {
+    public ByteArrayOutputStream getImage(int index) {
         return mImages.get(index);
     }
 
@@ -35,7 +52,7 @@ public class Images {
      *
      * @return store of downloaded images
      */
-    public static List<ByteArrayOutputStream> getAll() {
+    public List<ByteArrayOutputStream> getAll() {
         return mImages;
     }
 }

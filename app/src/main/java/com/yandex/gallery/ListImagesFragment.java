@@ -127,7 +127,7 @@ public class ListImagesFragment extends Fragment implements DownloadImageListene
             case OK: {
                 ByteArrayOutputStream responseData = (ByteArrayOutputStream) response.getData();
 
-                Images.addImage(responseData);
+                Images.instance().addImage(responseData);
 
                 Bitmap bitmap = ImageHelper.decodeImageRegion(responseData, mDisplay);
 

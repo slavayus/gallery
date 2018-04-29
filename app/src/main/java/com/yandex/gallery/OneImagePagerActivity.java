@@ -35,7 +35,7 @@ public class OneImagePagerActivity extends AppCompatActivity {
 
         int mIndex = getIntent().getIntExtra(EXTRA_IMAGE, 0);
         mViewPager = findViewById(R.id.one_image_view_pager);
-        mImages = Images.getAll();
+        mImages = Images.instance().getAll();
 
         mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override

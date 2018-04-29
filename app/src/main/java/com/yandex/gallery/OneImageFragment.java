@@ -32,7 +32,7 @@ public class OneImageFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         int index = getArguments().getInt(IMAGE_INDEX);
-        this.mImage = ImageHelper.decodeImage(Images.getImage(index));
+        this.mImage = ImageHelper.decodeImage(Images.instance().getImage(index));
     }
 
     @Nullable
