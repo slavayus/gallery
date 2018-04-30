@@ -14,9 +14,6 @@ import com.yandex.gallery.animation.DepthPageTransformer;
 import com.yandex.gallery.helper.Images;
 import com.yandex.gallery.tasks.BackgroundResponse;
 
-import java.io.OutputStream;
-import java.util.List;
-
 /**
  * Activity for hosting images in full display
  */
@@ -26,7 +23,6 @@ public class OneImagePagerActivity extends AppCompatActivity {
     private static final String LOG_TAG = "OneImagePagerActivity";
 
     private static ViewPager mViewPager;
-    private List<OutputStream> mImages;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,7 +31,6 @@ public class OneImagePagerActivity extends AppCompatActivity {
 
         int mIndex = getIntent().getIntExtra(EXTRA_IMAGE, 0);
         mViewPager = findViewById(R.id.one_image_view_pager);
-        mImages = Images.instance().getAll();
 
         mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -45,7 +40,7 @@ public class OneImagePagerActivity extends AppCompatActivity {
 
             @Override
             public int getCount() {
-                return mImages.size();
+                return Images.instance().getAll().size();
             }
         });
 

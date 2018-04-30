@@ -2,12 +2,15 @@ package com.yandex.gallery;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -112,18 +115,20 @@ public class OneImageFragment extends Fragment {
      * @param rootView view where are located rotation buttons
      */
     public void setUpRotateButtonListeners(View rootView) {
-        rootView.findViewById(R.id.rotate_right_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mImageView.setImageBitmap(ImageHelper.rotateImage(mImage, currentDegrees += 90));
-            }
-        });
-
-        rootView.findViewById(R.id.rotate_left_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mImageView.setImageBitmap(ImageHelper.rotateImage(mImage, currentDegrees -= 90));
-            }
-        });
+        ((BottomNavigationView) rootView.findViewById(R.id.bottom_rotate_buttons))
+                .setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.rotate_left_button:
+                                mImageView.setImageBitmap(ImageHelper.rotateImage(mImage, currentDegrees -= 90));
+                                break;
+                            case R.id.rotate_right_button:
+                                mImageView.setImageBitmap(ImageHelper.rotateImage(mImage, currentDegrees += 90));
+                                break;
+                        }
+                        return false;
+                    }
+                });
     }
 }

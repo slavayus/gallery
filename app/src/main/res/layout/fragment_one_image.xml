@@ -16,35 +16,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/rotate_buttons"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_margin="0dp"
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_rotate_buttons"
+        style="@style/MyActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemIconTint="@color/rotateButtons"
+        app:itemTextColor="@color/rotateButtons"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageButton
-            android:id="@+id/rotate_right_button"
-            style="@style/MyActionBar"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="0dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/rotate_right_button"
-            android:src="@drawable/rotate_right" />
-
-
-        <ImageButton
-            android:id="@+id/rotate_left_button"
-            style="@style/MyActionBar"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="0dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/rotate_left_button"
-            android:src="@drawable/rotate_left" />
-    </LinearLayout>
+        app:menu="@menu/navigation" />
 
 </android.support.constraint.ConstraintLayout>
