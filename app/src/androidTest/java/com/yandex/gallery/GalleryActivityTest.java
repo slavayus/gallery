@@ -71,7 +71,6 @@ public class GalleryActivityTest {
         mActivityRule.launchActivity(intent);
         onView(withId(R.id.images_recycler_view))
                 .check(matches(isDisplayed()));
-        mActivityRule.finishActivity();
     }
 
     private String getTokenFromProperties() throws IOException {
