@@ -1,10 +1,11 @@
 package com.yandex.gallery;
 
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+
+import com.yandex.gallery.helper.OAuthHelper;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +16,6 @@ import java.util.regex.Pattern;
 
 public class GalleryActivity extends SingleFragmentActivity {
     private static final String LOG_TAG = "GalleryActivity";
-    public static final String SAVED_TOKEN = "SAVED_TOKEN";
 
     /**
      * Create fragment for displaying images if user applied agreements of yandex.disk
@@ -50,13 +50,13 @@ public class GalleryActivity extends SingleFragmentActivity {
     /**
      * Save received token
      *
-     * @param token yandex 0Auth token
+     * @param token yandex 0Auth token which will be saved
      */
     private void saveToken(String token) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor edit = preferences.edit();
-        edit.putString(SAVED_TOKEN, token);
-        edit.apply();
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .edit()
+                .putString(OAuthHelper.RESPONSE_TYPE, token)
+                .apply();
         Log.d(LOG_TAG, " token saved");
     }
 }

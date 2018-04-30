@@ -1,11 +1,10 @@
 package com.yandex.gallery;
 
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
-import static com.yandex.gallery.GalleryActivity.SAVED_TOKEN;
+import com.yandex.gallery.helper.OAuthHelper;
 
 /**
  * App start activity
@@ -32,9 +31,8 @@ public class LaunchActivity extends SingleFragmentActivity {
      * @return 0Auth token
      */
     public String getToken() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String token = preferences.getString(SAVED_TOKEN, null);
         Log.d(LOG_TAG, " token loaded");
-        return token;
+        return PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .getString(OAuthHelper.RESPONSE_TYPE, null);
     }
 }
