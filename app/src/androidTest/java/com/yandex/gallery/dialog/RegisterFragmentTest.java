@@ -62,6 +62,7 @@ public class RegisterFragmentTest {
                 .check(matches(isDisplayed()));
         onView(withText(android.R.string.cancel))
                 .check(matches(isDisplayed()));
+        mActivityRule.finishActivity();
     }
 
     @Test
@@ -77,5 +78,6 @@ public class RegisterFragmentTest {
         intended(allOf(hasAction(Intent.ACTION_VIEW), hasData(OAuthHelper.getUri())));
 
         Intents.release();
+        mActivityRule.finishActivity();
     }
 }

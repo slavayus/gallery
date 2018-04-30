@@ -62,14 +62,17 @@ public class LastUploadedTask extends AsyncTask<String, Void, BackgroundResponse
         } catch (ServerIOException e) {
             e.printStackTrace();
             clearPreferences();
-            return new BackgroundResponse(BackgroundStatus.ERROR)
-                    .setMessage(fragment.getString(R.string.yandex_server_error_text));
+            return fragment.isAdded() ?
+                    new BackgroundResponse(BackgroundStatus.ERROR).setMessage(fragment.getString(R.string.yandex_server_error_text)) :
+                    new BackgroundResponse(BackgroundStatus.ERROR).setMessage("");
         }
     }
 
     private void clearPreferences() {
-        SharedPreferences preferences = fragment.getActivity().getPreferences(MODE_PRIVATE);
-        preferences.edit().clear().apply();
+        if (fragment.isAdded()) {
+            SharedPreferences preferences = fragment.getActivity().getPreferences(MODE_PRIVATE);
+            preferences.edit().clear().apply();
+        }
     }
 
     @Override

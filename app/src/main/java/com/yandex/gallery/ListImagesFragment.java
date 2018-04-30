@@ -100,9 +100,11 @@ public class ListImagesFragment extends Fragment implements DownloadImageListene
                 break;
             }
             case ERROR: {
-                DownloadImagesDialog.
-                        newInstance(response.getMessage()).
-                        show(getFragmentManager(), YANDEX_SERVER_ERROR_DIALOG);
+                DownloadImagesDialog downloadImagesDialog = DownloadImagesDialog.
+                        newInstance(response.getMessage());
+                if (downloadImagesDialog != null && getFragmentManager() != null) {
+                    downloadImagesDialog.show(getFragmentManager(), YANDEX_SERVER_ERROR_DIALOG);
+                }
                 clearPreferences();
             }
         }

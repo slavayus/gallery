@@ -52,7 +52,7 @@ public class GalleryActivity extends SingleFragmentActivity {
      *
      * @param token yandex 0Auth token which will be saved
      */
-    private void saveToken(String token) {
+    protected void saveToken(String token) {
         PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                 .edit()
                 .putString(OAuthHelper.RESPONSE_TYPE, token)

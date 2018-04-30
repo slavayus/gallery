@@ -54,6 +54,7 @@ public class LaunchActivityTest {
         mActivityRule.launchActivity(intent);
         onView(withText(R.string.register_fragment_title))
                 .check(matches(isDisplayed()));
+        mActivityRule.finishActivity();
 
         ExpectedException exception = ExpectedException.none();
 
@@ -61,6 +62,7 @@ public class LaunchActivityTest {
         mActivityRule.launchActivity(intent);
         exception.expect(NoMatchingViewException.class);
         onView(withId(R.id.images_recycler_view));
+        mActivityRule.finishActivity();
     }
 
 
@@ -89,6 +91,7 @@ public class LaunchActivityTest {
         assertNull(token);
 
         preferencesEditor.clear().apply();
+        mActivityRule.finishActivity();
     }
 
 }
