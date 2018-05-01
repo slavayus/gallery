@@ -86,6 +86,11 @@ public class ListImagesFragment extends Fragment implements DownloadImageListene
         return view;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Images.instance().getAll().clear();
+    }
 
     /**
      * Handler response from AsyncTask
@@ -129,19 +134,19 @@ public class ListImagesFragment extends Fragment implements DownloadImageListene
             case OK: {
                 ByteArrayOutputStream responseData = (ByteArrayOutputStream) response.getData();
 
-                Images.instance().addImage(responseData);
+                if (mCurrentImageIndex < 36 && getActivity() != null) {
 
-                Bitmap bitmap = ImageHelper.decodeImageRegion(responseData, mDisplay, this.getActivity());
+                    Images.instance().addImage(responseData);
 
-                mImageAdapter.addImage(bitmap);
-                mImageAdapter.updateItem();
+                    Bitmap bitmap = ImageHelper.decodeImageRegion(responseData, mDisplay, this.getActivity());
 
-                updateSubtitle();
+                    mImageAdapter.addImage(bitmap);
+                    mImageAdapter.updateItem();
 
-                OneImagePagerActivity.notifyAdapter();
+                    updateSubtitle();
 
-                if (mCurrentImageIndex < 36) {
-                    //                    new FlatResourceListTask(this, ++mCurrentImageIndex).execute(mToken);
+                    OneImagePagerActivity.notifyAdapter();
+
                     new LastUploadedTask(this, mCurrentImageIndex++).execute(mToken);
                 }
 
