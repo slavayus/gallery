@@ -131,7 +131,7 @@ public class ListImagesFragment extends Fragment implements DownloadImageListene
 
                 Images.instance().addImage(responseData);
 
-                Bitmap bitmap = ImageHelper.decodeImageRegion(responseData, mDisplay);
+                Bitmap bitmap = ImageHelper.decodeImageRegion(responseData, mDisplay, this.getActivity());
 
                 mImageAdapter.addImage(bitmap);
                 mImageAdapter.updateItem();

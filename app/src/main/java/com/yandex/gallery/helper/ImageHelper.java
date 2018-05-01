@@ -1,5 +1,6 @@
 package com.yandex.gallery.helper;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
@@ -12,6 +13,8 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
+
+import com.yandex.gallery.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -46,14 +49,15 @@ public final class ImageHelper {
      * Decode image in the form of a square.
      * Divides the screen in two and make a square from image with this params.
      *
-     * @param data    output stream with image
-     * @param display display params
+     * @param data     output stream with image
+     * @param display  display params
+     * @param activity current activity
      * @return Bitmap with decoded image.
      * @see Point
      */
-    public static Bitmap decodeImageRegion(ByteArrayOutputStream data, Point display) {
+    public static Bitmap decodeImageRegion(ByteArrayOutputStream data, Point display, Activity activity) {
         Log.d(LOG_TAG, " start decodeImageRegion");
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         long start = System.currentTimeMillis();
         try {
             BitmapRegionDecoder bitmapRegionDecoder = BitmapRegionDecoder.newInstance(data.toByteArray(), 0, data.toByteArray().length, false);
@@ -69,8 +73,8 @@ public final class ImageHelper {
             bitmap = Bitmap.createScaledBitmap(bitmap, display.x / 2 - 3, display.x / 2, false);
             bitmap = getRoundedCornerBitmap(bitmap);
         } catch (IOException e) {
-            //TODO
             e.printStackTrace();
+            return createEmptyImage(display, activity.getResources().getColor(R.color.emptyImageColor));
         }
 
         Log.d(LOG_TAG, " end decodeImages, elapsed time = " + (System.currentTimeMillis() - start));
