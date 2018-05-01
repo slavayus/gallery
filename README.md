@@ -1,7 +1,7 @@
 # gallery
 Android application to display photos from yandex.disk
 
-You can download apk file from this [link](https://yadi.sk/d/TrTfJtbV3V6mrx)
+You can download apk file from this [link](https://yadi.sk/d/YwzbsgkA3V8LxM)
 
 
 Authorization with yandex
